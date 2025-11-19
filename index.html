@@ -256,15 +256,15 @@ async function loadData(){
         fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
         fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
 
-        // Update "Senast kontrollerad" with latest timestamp
-        if (allData && allData.length > 0 && allData[0].timestamp) {
-            document.getElementById("latest").textContent = allData[0].timestamp;
+        // Update "Senast kontrollerad" with date from column E (previousDate)
+        if (allData && allData.length > 0 && allData[0].previousDate) {
+            document.getElementById("latest").textContent = allData[0].previousDate;
         } else {
-            document.getElementById("latest").textContent = new Date().toLocaleString('sv-SE');
+            document.getElementById("latest").textContent = "-";
         }
     } catch (error) {
         console.error("Error loading data:", error);
-        document.getElementById("latest").textContent = new Date().toLocaleString('sv-SE');
+        document.getElementById("latest").textContent = "-";
     }
 
     document.getElementById("loader").style.display="none";
@@ -291,6 +291,12 @@ async function save(){
         status: document.getElementById("status").value
     };
     
+    // Validate all fields are filled
+    if (!data.uppdrag || !data.fastighet || !data.adress || !data.lgh || !data.status) {
+        alert("Alla fält måste fyllas i!");
+        return;
+    }
+    
     try {
         await fetch(API_URL, {method:"POST", body:JSON.stringify(data)});
         
@@ -298,8 +304,16 @@ async function save(){
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
         
-        // Update "Senast kontrollerad"
-        document.getElementById("latest").textContent = new Date().toLocaleString('sv-SE');
+        // Update "Senast kontrollerad" with today's date
+        const today = new Date().toLocaleDateString('sv-SE');
+        document.getElementById("latest").textContent = today;
+        
+        // Reset form
+        document.getElementById("uppdrag").value = "";
+        document.getElementById("fastighet").value = "";
+        document.getElementById("adress").value = "";
+        document.getElementById("lgh").value = "";
+        document.getElementById("status").value = "";
         
         // Hide modal after 3 seconds
         setTimeout(() => {
@@ -307,6 +321,7 @@ async function save(){
         }, 3000);
     } catch (error) {
         console.error("Error saving data:", error);
+        alert("Fel vid sparning. Försök igen.");
     }
 }
 
@@ -319,4 +334,3 @@ if("serviceWorker" in navigator){
 </script>
 </body>
 </html>
-
