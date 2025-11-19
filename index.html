@@ -22,8 +22,8 @@ body {
   top:0; 
   width:100%; 
   text-align:center; 
-  padding:12px; 
-  font-size:18px; 
+  padding:16px; 
+  font-size:22px; 
   font-weight:bold; 
   background:#e0e0e0; 
   z-index:1000; 
@@ -33,17 +33,17 @@ body {
 
 .app { 
   max-width:100%; 
-  margin:70px auto 15px; 
+  margin:20px auto 15px; 
   display:none; 
   padding: 0 12px;
 }
 
 .card { 
   background:#e0e0e0; 
-  padding:15px; 
+  padding:20px; 
   border-radius:15px; 
   box-shadow:6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
-  margin-bottom:15px; 
+  margin-bottom:20px; 
   opacity:0; 
   animation:fadeIn 0.7s ease forwards; 
 }
@@ -51,34 +51,33 @@ body {
 label { 
   display:block; 
   font-weight:bold; 
-  margin-bottom:6px; 
+  margin-bottom:8px; 
   color:#333; 
-  font-size:15px;
+  font-size:18px;
 }
 
 select, input { 
   width:100%; 
-  padding:10px; 
-  border-radius:10px; 
+  padding:14px; 
+  border-radius:12px; 
   border:none; 
   background:#e0e0e0; 
   box-shadow: inset 3px 3px 6px #bebebe, inset -3px -3px 6px #ffffff; 
-  font-size:15px;
-  margin-bottom:15px; 
+  font-size:18px;
+  margin-bottom:16px; 
   color:#333;
 }
 
 .last-checked-display {
-  padding:10px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:12px;
   background:#d9d9d9;
-  font-size:14px;
+  font-size:16px;
   color:#333;
-  margin-bottom:15px;
+  margin-bottom:16px;
   display:none;
 }
 
-/* ✔️ BLINKANDE TEXT */
 .blink {
   animation: blinkAnim 0.9s infinite;
 }
@@ -96,18 +95,16 @@ select, input {
 .save-btn { 
   width:100%; 
   background:#e0e0e0; 
-  font-size:17px; 
-  padding:12px; 
+  font-size:24px; 
+  padding:16px; 
   border-radius:15px; 
   box-shadow: 6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
   border:none; 
   cursor:pointer; 
   font-weight:bold; 
   color:#333;
-  opacity:0; 
-  animation:fadeIn 1s ease forwards; 
-  animation-delay:0.2s; 
   transition: all 0.15s ease;
+  margin-top:10px;
 }
 
 .save-btn:active { 
@@ -126,8 +123,8 @@ select, input {
 }
 
 .loader { 
-  width:50px; 
-  height:50px; 
+  width:60px; 
+  height:60px; 
   margin:40px auto; 
   border-radius:50%; 
   box-shadow:6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
@@ -160,7 +157,7 @@ select, input {
 
 .modal-content {
   background: #e0e0e0;
-  padding: 24px;
+  padding: 28px;
   border-radius: 20px;
   box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
   text-align: center;
@@ -174,8 +171,8 @@ select, input {
 }
 
 .checkmark-circle {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   margin: 0 auto 12px;
   border-radius: 50%;
   background: #45a049;
@@ -185,8 +182,8 @@ select, input {
 }
 
 .checkmark {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   stroke: white;
   stroke-width: 4;
   fill: none;
@@ -205,7 +202,7 @@ select, input {
 }
 
 .saved-text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #333;
 }
@@ -283,7 +280,6 @@ async function loadData(){
     document.getElementById("app").style.display="block";
 }
 
-/* ✔️ NY LOGIK FÖR SENAST KONTROLLERAD */
 function updateLastChecked(){
     const selectedLgh = document.getElementById("lgh").value;
     const latestDiv = document.getElementById("latest");
@@ -293,7 +289,6 @@ function updateLastChecked(){
         return;
     }
 
-    // Visa blinkande "Söker…"
     latestDiv.textContent = "Söker senast kontrolldatum…";
     latestDiv.classList.add("show", "blink");
 
@@ -352,7 +347,6 @@ async function save(){
         document.getElementById("lgh").value = "";
         document.getElementById("status").value = "";
         
-        /* ✔️ RENSAR SENAST KONTROLLERAD */
         const latestDiv = document.getElementById("latest");
         latestDiv.textContent = "";
         latestDiv.classList.remove("show", "blink");
