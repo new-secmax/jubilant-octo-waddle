@@ -14,6 +14,7 @@ body {
   padding:0; 
   font-family: "Segoe UI", sans-serif; 
   background:#e0e0e0; 
+  touch-action: manipulation;
 }
 
 .topbar { 
@@ -21,28 +22,28 @@ body {
   top:0; 
   width:100%; 
   text-align:center; 
-  padding:15px; 
-  font-size:22px; 
+  padding:12px; 
+  font-size:18px; 
   font-weight:bold; 
   background:#e0e0e0; 
   z-index:1000; 
-  box-shadow: 4px 4px 10px #bebebe, -4px -4px 10px #ffffff; 
-  border-radius:0 0 20px 20px; 
+  box-shadow: 3px 3px 8px #bebebe, -3px -3px 8px #ffffff; 
+  border-radius:0 0 15px 15px; 
 }
 
 .app { 
-  max-width:540px; 
-  margin:80px auto 20px; 
+  max-width:100%; 
+  margin:70px auto 15px; 
   display:none; 
-  padding: 0 16px;
+  padding: 0 12px;
 }
 
 .card { 
   background:#e0e0e0; 
-  padding:20px; 
-  border-radius:20px; 
-  box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff; 
-  margin-bottom:20px; 
+  padding:15px; 
+  border-radius:15px; 
+  box-shadow:6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
+  margin-bottom:15px; 
   opacity:0; 
   animation:fadeIn 0.7s ease forwards; 
 }
@@ -50,39 +51,44 @@ body {
 label { 
   display:block; 
   font-weight:bold; 
-  margin-bottom:8px; 
+  margin-bottom:6px; 
   color:#333; 
-  font-size:18px;
+  font-size:15px;
 }
 
 select, input { 
   width:100%; 
-  padding:12px; 
-  border-radius:12px; 
+  padding:10px; 
+  border-radius:10px; 
   border:none; 
   background:#e0e0e0; 
-  box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff; 
-  font-size:18px;
-  margin-bottom:20px; 
+  box-shadow: inset 3px 3px 6px #bebebe, inset -3px -3px 6px #ffffff; 
+  font-size:15px;
+  margin-bottom:15px; 
   color:#333;
 }
 
 .last-checked-display {
-  padding:12px;
-  border-radius:12px;
+  padding:10px;
+  border-radius:10px;
   background:#d9d9d9;
-  font-size:18px;
+  font-size:14px;
   color:#333;
-  margin-bottom:20px;
+  margin-bottom:15px;
+  display:none;
+}
+
+.last-checked-display.show {
+  display:block;
 }
 
 .save-btn { 
   width:100%; 
   background:#e0e0e0; 
-  font-size:20px; 
-  padding:15px; 
-  border-radius:20px; 
-  box-shadow: 8px 8px 15px #bebebe,-8px -8px 15px #ffffff; 
+  font-size:17px; 
+  padding:12px; 
+  border-radius:15px; 
+  box-shadow: 6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
   border:none; 
   cursor:pointer; 
   font-weight:bold; 
@@ -90,10 +96,12 @@ select, input {
   opacity:0; 
   animation:fadeIn 1s ease forwards; 
   animation-delay:0.2s; 
+  transition: all 0.15s ease;
 }
 
 .save-btn:active { 
-  box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff; 
+  box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+  transform: scale(0.98);
 }
 
 .fade-in { 
@@ -107,11 +115,11 @@ select, input {
 }
 
 .loader { 
-  width:70px; 
-  height:70px; 
-  margin:60px auto; 
+  width:50px; 
+  height:50px; 
+  margin:40px auto; 
   border-radius:50%; 
-  box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff; 
+  box-shadow:6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
   animation:pulse 1.4s ease-in-out infinite; 
 }
 
@@ -142,11 +150,12 @@ select, input {
 
 .modal-content {
   background: #e0e0e0;
-  padding: 32px;
-  border-radius: 30px;
-  box-shadow: 8px 8px 15px #bebebe, -8px -8px 15px #ffffff;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
   text-align: center;
   animation: scaleIn 0.3s ease;
+  max-width: 90%;
 }
 
 @keyframes scaleIn {
@@ -155,9 +164,9 @@ select, input {
 }
 
 .checkmark-circle {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 16px;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 12px;
   border-radius: 50%;
   background: #45a049;
   display: flex;
@@ -166,8 +175,8 @@ select, input {
 }
 
 .checkmark {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   stroke: white;
   stroke-width: 4;
   fill: none;
@@ -186,7 +195,7 @@ select, input {
 }
 
 .saved-text {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: bold;
   color: #333;
 }
@@ -220,7 +229,7 @@ select, input {
 </select>
 
 <label>Senast kontrollerad:</label>
-<div id="latest" class="last-checked-display">Läser in...</div>
+<div id="latest" class="last-checked-display"></div>
 </div>
 
 <button class="save-btn" onclick="save()">SPARA</button>
@@ -256,19 +265,37 @@ async function loadData(){
         fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
         fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
 
-        // Update "Senast kontrollerad" with date from column E (previousDate)
-        if (allData && allData.length > 0 && allData[0].previousDate) {
-            document.getElementById("latest").textContent = allData[0].previousDate;
-        } else {
-            document.getElementById("latest").textContent = "-";
-        }
+        // Add event listener to lägenhetsnummer to show last checked info
+        document.getElementById("lgh").addEventListener("change", updateLastChecked);
     } catch (error) {
         console.error("Error loading data:", error);
-        document.getElementById("latest").textContent = "-";
     }
 
     document.getElementById("loader").style.display="none";
     document.getElementById("app").style.display="block";
+}
+
+function updateLastChecked(){
+    const selectedLgh = document.getElementById("lgh").value;
+    const latestDiv = document.getElementById("latest");
+    
+    if (!selectedLgh) {
+        latestDiv.classList.remove("show");
+        return;
+    }
+    
+    // Find the record for selected lägenhet
+    const record = allData.find(item => item.lgh === selectedLgh);
+    
+    if (record && record.previousDate) {
+        // Show date from column E and status from column F
+        const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
+        latestDiv.textContent = `${record.previousDate}${statusText}`;
+        latestDiv.classList.add("show");
+    } else {
+        latestDiv.textContent = "Senast kontroll hittas ej";
+        latestDiv.classList.add("show");
+    }
 }
 
 function fillSelect(id, arr){
@@ -297,16 +324,17 @@ async function save(){
         return;
     }
     
+    // Vibrate phone if supported
+    if (navigator.vibrate) {
+        navigator.vibrate(100);
+    }
+    
     try {
         await fetch(API_URL, {method:"POST", body:JSON.stringify(data)});
         
         // Show modal with checkmark
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
-        
-        // Update "Senast kontrollerad" with today's date
-        const today = new Date().toLocaleDateString('sv-SE');
-        document.getElementById("latest").textContent = today;
         
         // Reset form
         document.getElementById("uppdrag").value = "";
@@ -315,10 +343,13 @@ async function save(){
         document.getElementById("lgh").value = "";
         document.getElementById("status").value = "";
         
-        // Hide modal after 3 seconds
+        // Hide last checked info
+        document.getElementById("latest").classList.remove("show");
+        
+        // Hide modal after 2 seconds
         setTimeout(() => {
             modal.classList.remove("show");
-        }, 3000);
+        }, 2000);
     } catch (error) {
         console.error("Error saving data:", error);
         alert("Fel vid sparning. Försök igen.");
