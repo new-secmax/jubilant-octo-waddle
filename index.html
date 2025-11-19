@@ -1,65 +1,25 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Jordfelsbrytare Test</title> <link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#e0e0e0">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jordfelsbrytare Test</title>
+    <meta name="description" content="Test och kontrollera jordfelsbrytare enkelt och effektivt" />
+    <meta name="author" content="Lovable" />
 
-<style>
-body { margin:0; padding:0; font-family: "Segoe UI", sans-serif; background:#e0e0e0; } .topbar { position: sticky; top:0; width:100%; text-align:center; padding:15px; font-size:22px; font-weight:bold; background:#e0e0e0; z-index:1000; box-shadow: 4px 4px 10px #bebebe, -4px -4px 10px #ffffff; border-radius:0 0 20px 20px; } .app { max-width:540px; margin:80px auto 20px; display:none; } .card { background:#e0e0e0; padding:20px; border-radius:20px; box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff; margin-bottom:20px; opacity:0; animation:fadeIn 0.7s ease forwards; } label { display:block; font-weight:bold; margin-bottom:8px; color:#333; } select, input { width:100%; padding:12px; border-radius:12px; border:none; background:#e0e0e0; box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff; font-size:16px; margin-bottom:20px; } .save-btn { width:100%; background:#e0e0e0; font-size:20px; padding:15px; border-radius:20px; box-shadow: 8px 8px 15px #bebebe,-8px -8px 15px #ffffff; border:none; cursor:pointer; font-weight:bold; opacity:0; animation:fadeIn 1s ease forwards; animation-delay:0.2s; } .save-btn:active { box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff; } #saved { text-align:center; margin-top:15px; font-size:18px; font-weight:bold; color:green; display:none; } .fade-in { opacity:0; animation:fadeIn 0.7s ease forwards; } @keyframes fadeIn { 0%{opacity:0; transform:translateY(10px);} 100%{opacity:1; transform:translateY(0);} } .loader { width:70px; height:70px; margin:60px auto; border-radius:50%; box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff; animation:pulse 1.4s ease-in-out infinite; } @keyframes pulse {0%{transform:scale(1); box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff;}50%{transform:scale(0.9); box-shadow:inset 6px 6px 10px #bebebe, inset -6px -6px 10px #ffffff;}100%{transform:scale(1); box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff;}} .skeleton { height:25px; background:linear-gradient(90deg,#d8d8d8,#ececec,#d8d8d8); background-size:200% 100%; animation: shimmer 1.5s infinite; border-radius:12px; } @keyframes shimmer {0%{background-position:-200% 0;}100%{background-position:200% 0;}} </style> </head>
+    <meta property="og:title" content="Jordfelsbrytare Test" />
+    <meta property="og:description" content="Test och kontrollera jordfelsbrytare enkelt och effektivt" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-<body>
-<div class="topbar">Jordfelsbrytare Test</div> <div id="loader" class="loader"></div>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
 
-<div class="app" id="app">
-<div class="card">
-<label>Uppdrag</label><select id="uppdrag"></select> <label>Fastighet</label><select id="fastighet"></select> <label>Adress</label><select id="adress"></select> <label>Lägenhetsnummer</label><select id="lgh"></select> <label>Status</label> <select id="status"> <option value="">Välj status…</option> <option value="Funktion. OK">Funktion. OK</option> <option value="Ej tillgänglig">Ej tillgänglig</option> <option value="Funktionsfel">Funktionsfel</option>
-</select>
-<label>Senast kontrollerad:</label>
-<div id="latest" class="skeleton"></div> </div>
-
-<button class="save-btn" onclick="save()">SPARA</button> <div id="saved">✔️ Sparat!</div> </div>
-
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxd5A8t4eHkPwUM3ZTG4-lujGbAiW3jgq4qljZF2rmhA-YoV8RJNv5VIqHFAIrpuiRp/exec"; let allData = [];
-
-async function loadData(){
-    document.getElementById("loader").style.display="block";
-    document.getElementById("app").style.display="none";
-
-    const res = await fetch(API_URL);
-    const json = await res.json();
-    allData=json.data;
-
-    fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag))]);
-    fillSelect("fastighet",[...new Set(allData.map(i=>i.fastighet))]);
-    fillSelect("adress",[...new Set(allData.map(i=>i.adress))]);
-    fillSelect("lgh",[...new Set(allData.map(i=>i.lgh))]);
-
-    document.getElementById("loader").style.display="none";
-    document.getElementById("app").style.display="block";
-}
-
-function fillSelect(id,arr){
-    const sel=document.getElementById(id);
-    sel.innerHTML="<option value=''>Välj…</option>";
-    arr.forEach(v=>{ const o=document.createElement("option"); o.value=v; o.textContent=v; sel.appendChild(o); }); }
-
-async function save(){
-    const data={
-        uppdrag:document.getElementById("uppdrag").value,
-        fastighet:document.getElementById("fastighet").value,
-        adress:document.getElementById("adress").value,
-        lgh:document.getElementById("lgh").value,
-        status:document.getElementById("status").value
-    };
-    await fetch(API_URL,{method:"POST",body:JSON.stringify(data)});
-    const s=document.getElementById("saved"); s.style.display="block";
-    setTimeout(()=>{s.style.display="none";},3000);
-}
-loadData();
-
-// REGISTER SERVICE WORKER
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js");}
-</script>
-</body>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
+
