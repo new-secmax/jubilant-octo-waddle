@@ -78,6 +78,17 @@ select, input {
   display:none;
 }
 
+/* ✔️ BLINKANDE TEXT */
+.blink {
+  animation: blinkAnim 0.9s infinite;
+}
+
+@keyframes blinkAnim {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
 .last-checked-display.show {
   display:block;
 }
@@ -129,7 +140,6 @@ select, input {
   100%{transform:scale(1); box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff;}
 }
 
-/* Modal overlay for save confirmation */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -235,7 +245,6 @@ select, input {
 <button class="save-btn" onclick="save()">SPARA</button>
 </div>
 
-<!-- Save confirmation modal -->
 <div id="savedModal" class="modal-overlay">
 <div class="modal-content">
 <div class="checkmark-circle">
@@ -265,7 +274,6 @@ async function loadData(){
         fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
         fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
 
-        // Add event listener to lägenhetsnummer to show last checked info
         document.getElementById("lgh").addEventListener("change", updateLastChecked);
     } catch (error) {
         console.error("Error loading data:", error);
@@ -275,27 +283,32 @@ async function loadData(){
     document.getElementById("app").style.display="block";
 }
 
+/* ✔️ NY LOGIK FÖR SENAST KONTROLLERAD */
 function updateLastChecked(){
     const selectedLgh = document.getElementById("lgh").value;
     const latestDiv = document.getElementById("latest");
     
     if (!selectedLgh) {
-        latestDiv.classList.remove("show");
+        latestDiv.classList.remove("show", "blink");
         return;
     }
-    
-    // Find the record for selected lägenhet
-    const record = allData.find(item => item.lgh === selectedLgh);
-    
-    if (record && record.previousDate) {
-        // Show date from column E and status from column F
-        const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
-        latestDiv.textContent = `${record.previousDate}${statusText}`;
-        latestDiv.classList.add("show");
-    } else {
-        latestDiv.textContent = "Senast kontroll hittas ej";
-        latestDiv.classList.add("show");
-    }
+
+    // Visa blinkande "Söker…"
+    latestDiv.textContent = "Söker senast kontrolldatum…";
+    latestDiv.classList.add("show", "blink");
+
+    setTimeout(() => {
+        const record = allData.find(item => item.lgh === selectedLgh);
+
+        if (record && record.previousDate) {
+            latestDiv.classList.remove("blink");
+            const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
+            latestDiv.textContent = `${record.previousDate}${statusText}`;
+        } else {
+            latestDiv.classList.remove("blink");
+            latestDiv.textContent = "Inget datum hittas";
+        }
+    }, 500);
 }
 
 function fillSelect(id, arr){
@@ -318,13 +331,11 @@ async function save(){
         status: document.getElementById("status").value
     };
     
-    // Validate all fields are filled
     if (!data.uppdrag || !data.fastighet || !data.adress || !data.lgh || !data.status) {
         alert("Alla fält måste fyllas i!");
         return;
     }
     
-    // Vibrate phone if supported
     if (navigator.vibrate) {
         navigator.vibrate(100);
     }
@@ -332,21 +343,20 @@ async function save(){
     try {
         await fetch(API_URL, {method:"POST", body:JSON.stringify(data)});
         
-        // Show modal with checkmark
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
         
-        // Reset form
         document.getElementById("uppdrag").value = "";
         document.getElementById("fastighet").value = "";
         document.getElementById("adress").value = "";
         document.getElementById("lgh").value = "";
         document.getElementById("status").value = "";
         
-        // Hide last checked info
-        document.getElementById("latest").classList.remove("show");
+        /* ✔️ RENSAR SENAST KONTROLLERAD */
+        const latestDiv = document.getElementById("latest");
+        latestDiv.textContent = "";
+        latestDiv.classList.remove("show", "blink");
         
-        // Hide modal after 2 seconds
         setTimeout(() => {
             modal.classList.remove("show");
         }, 2000);
@@ -358,7 +368,6 @@ async function save(){
 
 loadData();
 
-// REGISTER SERVICE WORKER
 if("serviceWorker" in navigator){
     navigator.serviceWorker.register("./sw.js").catch(err => console.log("SW registration failed"));
 }
