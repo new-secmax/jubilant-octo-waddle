@@ -366,6 +366,9 @@ async function save(){
         // Ladda om data från servern för att få senaste informationen
         await loadData();
         
+        // Uppdatera "Senast kontrollerad" med ny data
+        updateLastChecked();
+        
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
         
