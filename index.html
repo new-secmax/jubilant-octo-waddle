@@ -70,13 +70,13 @@ select, input {
 }
 
 .last-checked-display {
-  padding:14px;
+  padding:8px 12px;
   border-radius:10px;
   background:#dceef5;
-  font-size:18px;
+  font-size:16px;
   color:#3b6880;
   margin-bottom:10px;
-  min-height:48px;
+  min-height:36px;
   display:flex;
   align-items:center;
 }
@@ -207,19 +207,19 @@ select, input {
 
 <div class="app" id="app">
 <div class="card">
-<label>Uppdrag</label>
+<label>📋 Uppdrag</label>
 <select id="uppdrag"></select>
 
-<label>Fastighet</label>
+<label>🏢 Fastighet</label>
 <select id="fastighet"></select>
 
-<label>Adress</label>
+<label>📍 Adress</label>
 <select id="adress"></select>
 
-<label>Lägenhetsnummer</label>
+<label>🚪 Lägenhetsnummer</label>
 <select id="lgh"></select>
 
-<label>Status</label>
+<label>✅ Status</label>
 <select id="status">
 <option value="">Välj status…</option>
 <option value="Funktion. OK">Funktion. OK</option>
@@ -227,7 +227,7 @@ select, input {
 <option value="Funktionsfel">Funktionsfel</option>
 </select>
 
-<label>Senast kontrollerad:</label>
+<label>📅 Senast kontrollerad:</label>
 <div id="latest" class="last-checked-display"></div>
 </div>
 
@@ -287,7 +287,7 @@ function updateLastChecked(){
     
     if (record && record.previousDate) {
         const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
-        latestDiv.innerHTML = `<strong>📅 ${record.previousDate}</strong>${statusText}`;
+        latestDiv.innerHTML = `<strong>${record.previousDate}</strong>${statusText}`;
     } else {
         latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>';
     }
