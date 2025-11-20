@@ -301,7 +301,7 @@ select:focus, input:focus {
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxd5A8t4eHkPwUM3ZTG4-lujGbAiW3jgq4qljZF2rmhA-YoV8RJNv5VIqHFAIrpuiRp/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzRsmS3W8ARaCHQHLcRMCC8uEHsYkHU1O-pq1xwnGZgKoBNLLH-ffyRKifFvbprMRDA/exec";
 let allData = [];
 
 async function loadData(){
@@ -312,6 +312,16 @@ async function loadData(){
         const res = await fetch(API_URL);
         const json = await res.json();
         allData = json.data || [];
+
+        // DEBUG: Visa hela JSON-svaret
+        console.log("📦 FULL JSON RESPONSE:", JSON.stringify(json, null, 2));
+        console.log("📊 Total antal poster:", allData.length);
+        
+        // DEBUG: Visa första posten i detalj
+        if (allData.length > 0) {
+            console.log("🔍 FÖRSTA POSTEN (alla fält):", JSON.stringify(allData[0], null, 2));
+            console.log("🔍 Alla fältnamn i första posten:", Object.keys(allData[0]));
+        }
 
         fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
         fillSelect("fastighet",[...new Set(allData.map(i=>i.fastighet).filter(Boolean))]);
@@ -328,7 +338,7 @@ async function loadData(){
         
         console.log("✅ Data loaded, event listeners attached");
     } catch (error) {
-        console.error("Error loading data:", error);
+        console.error("❌ Error loading data:", error);
     }
 
     document.getElementById("loader").style.display="none";
@@ -349,21 +359,28 @@ function updateLastChecked(){
         return;
     }
     
-    console.log("🔍 FULL DATA SAMPLE:", JSON.stringify(allData.slice(0, 2), null, 2));
-    console.log("🔍 Total records:", allData.length);
-    
     // Jämför både adress och lägenhetsnummer (konvertera till nummer för säker jämförelse)
     const record = allData.find(item => 
         String(item.adress || '').trim() === String(selectedAdress || '').trim() && 
         Number(item.lgh) === Number(selectedLgh)
     );
     
-    console.log("Found record:", record);
+    console.log("🔍 HITTAD POST:", JSON.stringify(record, null, 2));
+    console.log("🔍 ALLA FÄLTNAMN i hittad post:", record ? Object.keys(record) : "ingen post hittades");
+    
     if (!record) {
         console.log("❌ No match found");
         latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>';
         return;
     }
+    
+    // DEBUG: Kolla alla möjliga fältnamn för datum
+    console.log("🔍 Testar olika fältnamn:");
+    console.log("  - record.previousDate:", record.previousDate);
+    console.log("  - record.previousdate:", record.previousdate);
+    console.log("  - record.lastDate:", record.lastDate);
+    console.log("  - record.date:", record.date);
+    console.log("  - record.datum:", record.datum);
     
     if (record.previousDate) {
         const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
@@ -371,7 +388,8 @@ function updateLastChecked(){
         console.log("✅ Showing:", record.previousDate, statusText);
     } else {
         latestDiv.innerHTML = '<span style="color:#999;">Inget tidigare test registrerat</span>';
-        console.log("⚠️ Record found but no previousDate");
+        console.log("⚠️ Record found but no previousDate field");
+        console.log("⚠️ Tillgängliga fält:", Object.keys(record));
     }
 }
 
