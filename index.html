@@ -442,12 +442,22 @@ function filterLgh(){
     // Normalisera adress för matchning (hanterar även "(Ingen adress)")
     const actualAdress = normalizeAdress(adress);
     
-    // Visa bara lägenhetsnummer som finns för detta uppdrag, fastighet OCH adress i datan
-    const filtered = allData.filter(item => 
+    // Försök först matcha på uppdrag + fastighet + adress
+    let filtered = allData.filter(item => 
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet && 
         normalizeAdress(item.adress) === actualAdress
     );
+
+    // Om inget hittades (t.ex. pga mellanslag eller stavfel), falla tillbaka till bara uppdrag + fastighet
+    if (!filtered.length) {
+        filtered = allData.filter(item => 
+            item.uppdrag === uppdrag &&
+            item.fastighet === fastighet
+        );
+        console.log("🔁 Fallback: visar lägenheter endast baserat på uppdrag + fastighet", { uppdrag, fastighet, adress });
+    }
+
     const lgh = [...new Set(filtered.map(i=>getLgh(i)).filter(Boolean))];
     fillSelect("lgh", lgh);
 
@@ -469,13 +479,25 @@ function updateLastChecked(){
     // Normalisera adress för matchning (hanterar även "(Ingen adress)")
     const actualAdress = normalizeAdress(selectedAdress);
     
-    // Matcha med alla fält för att hitta exakt rätt post
-    const record = allData.find(item => 
+    // Matcha med alla fält för att hitta exakt rätt post (inkl. adress)
+    let record = allData.find(item => 
         item.uppdrag === uppdrag &&
         item.fastighet === fastighet &&
         normalizeAdress(item.adress) === actualAdress && 
         String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
     );
+
+    // Om ingen post hittas (t.ex. pga avvikande adressvärde), försök utan adressmatchning
+    if (!record) {
+        record = allData.find(item => 
+            item.uppdrag === uppdrag &&
+            item.fastighet === fastighet &&
+            String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
+        );
+        if (record) {
+            console.log("🔁 Fallback i updateLastChecked utan adressmatchning", { uppdrag, fastighet, selectedAdress, selectedLgh });
+        }
+    }
 
     if (!record) {
         latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>';
