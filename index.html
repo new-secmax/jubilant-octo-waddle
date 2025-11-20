@@ -257,6 +257,31 @@ select, input {
 const API_URL = "https://script.google.com/macros/s/AKfycbxd5A8t4eHkPwUM3ZTG4-lujGbAiW3jgq4qljZF2rmhA-YoV8RJNv5VIqHFAIrpuiRp/exec";
 let allData = [];
 
+/**
+ * Hjälp: normalisera ett värde för säker jämförelse
+ */
+function norm(v){
+  if (v === null || v === undefined) return "";
+  return String(v).trim();
+}
+
+/**
+ * Fyll en select med värden (array av strängar)
+ */
+function fillSelect(id, arr){
+    const sel = document.getElementById(id);
+    sel.innerHTML = "<option value=''>Välj…</option>";
+    arr.forEach(v => {
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        sel.appendChild(o);
+    });
+}
+
+/**
+ * Ladda data från API och fyll selects.
+ */
 async function loadData(){
     document.getElementById("loader").style.display="block";
     document.getElementById("app").style.display="none";
@@ -265,58 +290,102 @@ async function loadData(){
         const res = await fetch(API_URL);
         const json = await res.json();
         allData = json.data || [];
+        console.debug("Loaded entries:", allData.length);
 
-        fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
-        fillSelect("fastighet",[...new Set(allData.map(i=>i.fastighet).filter(Boolean))]);
-        fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
-        fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
+        // Unika värden per kolumn (normaliserade för att undvika dubbletter pga whitespace)
+        const uppdragVals = [...new Set(allData.map(i=>norm(i.uppdrag)).filter(Boolean))];
+        const fastighetVals = [...new Set(allData.map(i=>norm(i.fastighet)).filter(Boolean))];
+        const adressVals = [...new Set(allData.map(i=>norm(i.adress)).filter(Boolean))];
+        const lghVals = [...new Set(allData.map(i=>norm(i.lgh)).filter(Boolean))];
 
-        document.getElementById("lgh").addEventListener("change", updateLastChecked);
+        fillSelect("uppdrag", uppdragVals);
+        fillSelect("fastighet", fastighetVals);
+        fillSelect("adress", adressVals);
+        fillSelect("lgh", lghVals);
+
+        // Lägg change-listeners på alla selects så updateLastChecked triggas vid ändring
+        ["uppdrag","fastighet","adress","lgh"].forEach(id => {
+            document.getElementById(id).addEventListener("change", updateLastChecked);
+        });
+
     } catch (error) {
         console.error("Error loading data:", error);
+        alert("Fel vid inläsning av data. Kontrollera nätverk och API.");
+    } finally {
+        document.getElementById("loader").style.display="none";
+        document.getElementById("app").style.display="block";
     }
-
-    document.getElementById("loader").style.display="none";
-    document.getElementById("app").style.display="block";
 }
 
+/**
+ * Uppdatera "Senast kontrollerad"-rutan.
+ * Söker först efter full match (uppdrag+fastighet+adress+lgh), annars fallback på lgh.
+ */
 function updateLastChecked(){
-    const selectedLgh = document.getElementById("lgh").value;
+    const selUppdrag = norm(document.getElementById("uppdrag").value);
+    const selFastighet = norm(document.getElementById("fastighet").value);
+    const selAdress = norm(document.getElementById("adress").value);
+    const selLgh = norm(document.getElementById("lgh").value);
+
     const latestDiv = document.getElementById("latest");
-    
-    if (!selectedLgh) {
-        latestDiv.classList.remove("show", "blink");
+
+    // Om inget lägenhetsnummer valt, visa tom text men behåll rutan synlig
+    if (!selLgh) {
+        latestDiv.classList.remove("blink");
+        latestDiv.textContent = "";
         return;
     }
 
     latestDiv.textContent = "Söker senast kontrolldatum…";
-    latestDiv.classList.add("show", "blink");
+    latestDiv.classList.add("blink");
 
+    // Korta artificiella väntan för UX (kan tas bort)
     setTimeout(() => {
-        const record = allData.find(item => item.lgh === selectedLgh);
+        // Först försök hitta full match på alla fält som är ifyllda
+        let record = allData.find(item => {
+            const aU = norm(item.uppdrag);
+            const aF = norm(item.fastighet);
+            const aA = norm(item.adress);
+            const aL = norm(item.lgh);
 
-        if (record && record.previousDate) {
+            // Om användaren inte valt vissa fält (t.ex. uppdrag tom), så matcha bara de ifyllda.
+            const matchU = selUppdrag ? (aU === selUppdrag) : true;
+            const matchF = selFastighet ? (aF === selFastighet) : true;
+            const matchA = selAdress ? (aA === selAdress) : true;
+            const matchL = aL === selLgh;
+
+            return matchU && matchF && matchA && matchL;
+        });
+
+        // Fallback: om ingen full match, försök hitta första post med samma lgh
+        if (!record) {
+            record = allData.find(item => norm(item.lgh) === selLgh);
+            if (record) console.debug("Fallback: hittade post enbart på lgh.");
+        }
+
+        if (record) {
             latestDiv.classList.remove("blink");
-            const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
-            latestDiv.textContent = `${record.previousDate}${statusText}`;
+            // Hantera olika möjliga fältnamn för datum/status (robusthet)
+            const possibleDate = record.previousDate || record.lastChecked || record.date || record.previous_date || record.datum;
+            const possibleStatus = record.previousStatus || record.status || record.previous_status;
+
+            if (possibleDate) {
+                const statusText = possibleStatus ? ` - ${possibleStatus}` : '';
+                latestDiv.textContent = `${possibleDate}${statusText}`;
+            } else {
+                latestDiv.textContent = "Inget datum hittas";
+            }
         } else {
             latestDiv.classList.remove("blink");
             latestDiv.textContent = "Inget datum hittas";
+            console.debug("No record found for:", {selUppdrag, selFastighet, selAdress, selLgh});
         }
-    }, 500);
+    }, 350);
 }
 
-function fillSelect(id, arr){
-    const sel = document.getElementById(id);
-    sel.innerHTML = "<option value=''>Välj…</option>";
-    arr.forEach(v => { 
-        const o = document.createElement("option"); 
-        o.value = v; 
-        o.textContent = v; 
-        sel.appendChild(o); 
-    });
-}
-
+/**
+ * Sparar posten — vi lägger till Content-Type header också.
+ */
 async function save(){
     const data = {
         uppdrag: document.getElementById("uppdrag").value,
@@ -325,43 +394,53 @@ async function save(){
         lgh: document.getElementById("lgh").value,
         status: document.getElementById("status").value
     };
-    
+
     if (!data.uppdrag || !data.fastighet || !data.adress || !data.lgh || !data.status) {
         alert("Alla fält måste fyllas i!");
         return;
     }
-    
+
     if (navigator.vibrate) {
         navigator.vibrate(100);
     }
-    
+
     try {
-        await fetch(API_URL, {method:"POST", body:JSON.stringify(data)});
-        
+        await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
-        
+
         document.getElementById("uppdrag").value = "";
         document.getElementById("fastighet").value = "";
         document.getElementById("adress").value = "";
         document.getElementById("lgh").value = "";
         document.getElementById("status").value = "";
-        
+
         const latestDiv = document.getElementById("latest");
         latestDiv.textContent = "";
-        latestDiv.classList.remove("show", "blink");
-        
+        latestDiv.classList.remove("blink");
+
         setTimeout(() => {
             modal.classList.remove("show");
         }, 2000);
+
+        // Efter sparning: ladda om data från server för att uppdatera listor och historik
+        loadData();
+
     } catch (error) {
         console.error("Error saving data:", error);
         alert("Fel vid sparning. Försök igen.");
     }
 }
 
+// Kör init
 loadData();
 
+// Service worker registrering (oförändrat)
 if("serviceWorker" in navigator){
     navigator.serviceWorker.register("./sw.js").catch(err => console.log("SW registration failed"));
 }
