@@ -238,6 +238,11 @@ select:focus, input:focus {
 </div>
 
 <button class="save-btn" onclick="save()">SPARA TEST</button>
+
+<div class="card" style="margin-top:20px;">
+<button class="save-btn" onclick="showDebugInfo()" style="background:#fff3cd; border-color:#ffc107;">🔍 VISA DEBUG INFO</button>
+<pre id="debugInfo" style="display:none; background:#f8f9fa; padding:12px; border-radius:8px; font-size:12px; overflow:auto; max-height:300px; margin-top:10px;"></pre>
+</div>
 </div>
 
 <div id="savedModal" class="modal-overlay">
@@ -293,10 +298,18 @@ function updateLastChecked(){
         return;
     }
     
+    // Log full data structure to see field names
+    console.log("🔍 FULL DATA SAMPLE:", JSON.stringify(allData.slice(0, 2), null, 2));
+    console.log("🔍 Total records:", allData.length);
+    
     const record = allData.find(item => item.adress === selectedAdress && item.lgh === selectedLgh);
     
     console.log("Found record:", record);
-    console.log("All data sample:", allData.slice(0, 2));
+    if (!record) {
+        console.log("❌ No match found. Checking all records with this address:");
+        const matchingAddr = allData.filter(item => item.adress === selectedAdress);
+        console.log("Records with matching address:", matchingAddr);
+    }
     
     if (record && record.previousDate) {
         const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
@@ -366,6 +379,23 @@ async function save(){
     } catch(err) {
         alert("Kunde inte spara. Försök igen.");
     }
+}
+
+function showDebugInfo(){
+    const debugDiv = document.getElementById("debugInfo");
+    const selectedAdress = document.getElementById("adress").value;
+    const selectedLgh = document.getElementById("lgh").value;
+    
+    const info = {
+        "Total records": allData.length,
+        "Selected adress": selectedAdress,
+        "Selected lgh": selectedLgh,
+        "First 3 records": allData.slice(0, 3),
+        "Matching records": allData.filter(item => item.adress === selectedAdress && item.lgh === selectedLgh)
+    };
+    
+    debugDiv.textContent = JSON.stringify(info, null, 2);
+    debugDiv.style.display = "block";
 }
 
 loadData();
