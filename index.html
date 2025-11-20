@@ -318,8 +318,15 @@ async function loadData(){
         fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
         fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
 
-        document.getElementById("adress").addEventListener("change", updateLastChecked);
-        document.getElementById("lgh").addEventListener("change", updateLastChecked);
+        // Ta bort gamla event listeners och lägg till nya
+        const adressEl = document.getElementById("adress");
+        const lghEl = document.getElementById("lgh");
+        adressEl.removeEventListener("change", updateLastChecked);
+        lghEl.removeEventListener("change", updateLastChecked);
+        adressEl.addEventListener("change", updateLastChecked);
+        lghEl.addEventListener("change", updateLastChecked);
+        
+        console.log("✅ Data loaded, event listeners attached");
     } catch (error) {
         console.error("Error loading data:", error);
     }
@@ -430,7 +437,7 @@ async function save(){
         document.getElementById("adress").selectedIndex = 0;
         document.getElementById("lgh").selectedIndex = 0;
         document.getElementById("status").selectedIndex = 0;
-        document.getElementById("latest").textContent = "";
+        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
     } catch(err) {
         alert("Kunde inte spara. Försök igen.");
     }
