@@ -385,15 +385,40 @@ function showDebugInfo(){
     const debugDiv = document.getElementById("debugInfo");
     const selectedAdress = document.getElementById("adress").value;
     const selectedLgh = document.getElementById("lgh").value;
-    
+
+    const first3Detailed = allData.slice(0, 3).map((item, index) => ({
+        index,
+        uppdrag: item.uppdrag,
+        fastighet: item.fastighet,
+        adress: item.adress,
+        lgh: item.lgh,
+        adressType: typeof item.adress,
+        lghType: typeof item.lgh,
+        adressTrimmed: String(item.adress || '').trim(),
+        selectedAdressTrimmed: String(selectedAdress || '').trim(),
+        lghAsString: String(item.lgh || ''),
+        lghTrimmed: String(item.lgh || '').trim(),
+        selectedLghTrimmed: String(selectedLgh || '').trim(),
+        equalsAdress: String(item.adress || '').trim() === String(selectedAdress || '').trim(),
+        equalsLgh: String(item.lgh || '').trim() === String(selectedLgh || '').trim(),
+    }));
+
+    const adressMatches = allData.filter(item => String(item.adress || '').trim() === String(selectedAdress || '').trim());
+    const lghMatches = allData.filter(item => String(item.lgh || '').trim() === String(selectedLgh || '').trim());
+    const fullMatches = allData.filter(item => String(item.adress || '').trim() === String(selectedAdress || '').trim() && String(item.lgh || '').trim() === String(selectedLgh || '').trim());
+
     const info = {
         "Total records": allData.length,
         "Selected adress": selectedAdress,
         "Selected lgh": selectedLgh,
-        "First 3 records": allData.slice(0, 3),
-        "Matching records": allData.filter(item => String(item.adress || '').trim() === String(selectedAdress || '').trim() && String(item.lgh || '').trim() === String(selectedLgh || '').trim())
+        "First 3 detailed": first3Detailed,
+        "Adress-only matches (count)": adressMatches.length,
+        "Lgh-only matches (count)": lghMatches.length,
+        "Full matches (count)": fullMatches.length,
+        "Full matches": fullMatches,
     };
-    
+
+    console.log('🔍 DEBUG INFO', info);
     debugDiv.textContent = JSON.stringify(info, null, 2);
     debugDiv.style.display = "block";
 }
