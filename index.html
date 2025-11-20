@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -322,18 +323,18 @@ async function loadData(){
             console.log("🔍 Alla fältnamn i första posten:", Object.keys(allData[0]));
         }
 
-        fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
-        fillSelect("fastighet",[...new Set(allData.map(i=>i.fastighet).filter(Boolean))]);
-        fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
-        fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
-
-        // Ta bort gamla event listeners och lägg till nya
-        const adressEl = document.getElementById("adress");
-        const lghEl = document.getElementById("lgh");
-        adressEl.removeEventListener("change", updateLastChecked);
-        lghEl.removeEventListener("change", updateLastChecked);
-        adressEl.addEventListener("change", updateLastChecked);
-        lghEl.addEventListener("change", updateLastChecked);
+        // Filtrera bort rader med tomma värden
+        allData = allData.filter(item => 
+            item.uppdrag && item.fastighet && item.adress && item.lgh
+        );
+        
+        fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag))]);
+        
+        // Lägg till event listeners för kedjefiltrering
+        document.getElementById("uppdrag").addEventListener("change", filterFastighet);
+        document.getElementById("fastighet").addEventListener("change", filterAdress);
+        document.getElementById("adress").addEventListener("change", filterLgh);
+        document.getElementById("lgh").addEventListener("change", updateLastChecked);
         
         console.log("✅ Data loaded, event listeners attached");
     } catch (error) {
@@ -344,51 +345,105 @@ async function loadData(){
     document.getElementById("app").style.display="block";
 }
 
+function filterFastighet(){
+    const uppdrag = document.getElementById("uppdrag").value;
+    
+    if (!uppdrag) {
+        fillSelect("fastighet", []);
+        fillSelect("adress", []);
+        fillSelect("lgh", []);
+        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+        return;
+    }
+    
+    // Visa bara fastigheter som finns för detta uppdrag i datan
+    const filtered = allData.filter(item => item.uppdrag === uppdrag);
+    const fastigheter = [...new Set(filtered.map(i=>i.fastighet))];
+    fillSelect("fastighet", fastigheter);
+    
+    // Nollställ efterföljande dropdowns
+    fillSelect("adress", []);
+    fillSelect("lgh", []);
+    document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+}
+
+function filterAdress(){
+    const uppdrag = document.getElementById("uppdrag").value;
+    const fastighet = document.getElementById("fastighet").value;
+    
+    if (!uppdrag || !fastighet) {
+        fillSelect("adress", []);
+        fillSelect("lgh", []);
+        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+        return;
+    }
+    
+    // Visa bara adresser som finns för detta uppdrag OCH fastighet i datan
+    const filtered = allData.filter(item => 
+        item.uppdrag === uppdrag && 
+        item.fastighet === fastighet
+    );
+    const adresser = [...new Set(filtered.map(i=>i.adress))];
+    fillSelect("adress", adresser);
+    
+    // Nollställ efterföljande dropdowns
+    fillSelect("lgh", []);
+    document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+}
+
+function filterLgh(){
+    const uppdrag = document.getElementById("uppdrag").value;
+    const fastighet = document.getElementById("fastighet").value;
+    const adress = document.getElementById("adress").value;
+    
+    if (!uppdrag || !fastighet || !adress) {
+        fillSelect("lgh", []);
+        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+        return;
+    }
+    
+    // Visa bara lägenhetsnummer som finns för detta uppdrag, fastighet OCH adress i datan
+    const filtered = allData.filter(item => 
+        item.uppdrag === uppdrag && 
+        item.fastighet === fastighet && 
+        item.adress === adress
+    );
+    const lgh = [...new Set(filtered.map(i=>i.lgh))];
+    fillSelect("lgh", lgh);
+    
+    document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+}
+
 function updateLastChecked(){
+    const uppdrag = document.getElementById("uppdrag").value;
+    const fastighet = document.getElementById("fastighet").value;
     const selectedAdress = document.getElementById("adress").value;
     const selectedLgh = document.getElementById("lgh").value;
     const latestDiv = document.getElementById("latest");
     
-    console.log("🔍 updateLastChecked called");
-    console.log("Selected adress:", selectedAdress);
-    console.log("Selected lgh:", selectedLgh);
-    
-    if (!selectedAdress || !selectedLgh) {
-        latestDiv.innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
+    if (!uppdrag || !fastighet || !selectedAdress || !selectedLgh) {
+        latestDiv.innerHTML = '<span style="color:#999;">Välj alla fält</span>';
         return;
     }
     
-    // Jämför både adress och lägenhetsnummer (konvertera till nummer för säker jämförelse)
+    // Matcha med alla fält för att hitta exakt rätt post
     const record = allData.find(item => 
+        item.uppdrag === uppdrag &&
+        item.fastighet === fastighet &&
         String(item.adress || '').trim() === String(selectedAdress || '').trim() && 
         Number(item.lgh) === Number(selectedLgh)
     );
     
-    console.log("🔍 HITTAD POST:", JSON.stringify(record, null, 2));
-    console.log("🔍 ALLA FÄLTNAMN i hittad post:", record ? Object.keys(record) : "ingen post hittades");
-    
     if (!record) {
-        console.log("❌ No match found");
         latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>';
         return;
     }
     
-    // DEBUG: Kolla alla möjliga fältnamn för datum
-    console.log("🔍 Testar olika fältnamn:");
-    console.log("  - record.previousDate:", record.previousDate);
-    console.log("  - record.previousdate:", record.previousdate);
-    console.log("  - record.lastDate:", record.lastDate);
-    console.log("  - record.date:", record.date);
-    console.log("  - record.datum:", record.datum);
-    
     if (record.previousDate) {
         const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
         latestDiv.innerHTML = `<strong>${record.previousDate}</strong>${statusText}`;
-        console.log("✅ Showing:", record.previousDate, statusText);
     } else {
         latestDiv.innerHTML = '<span style="color:#999;">Inget tidigare test registrerat</span>';
-        console.log("⚠️ Record found but no previousDate field");
-        console.log("⚠️ Tillgängliga fält:", Object.keys(record));
     }
 }
 
