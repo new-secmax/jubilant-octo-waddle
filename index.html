@@ -302,7 +302,7 @@ function updateLastChecked(){
     console.log("🔍 FULL DATA SAMPLE:", JSON.stringify(allData.slice(0, 2), null, 2));
     console.log("🔍 Total records:", allData.length);
     
-    const record = allData.find(item => item.adress === selectedAdress && item.lgh === selectedLgh);
+    const record = allData.find(item => String(item.adress || '').trim() === String(selectedAdress || '').trim() && String(item.lgh || '').trim() === String(selectedLgh || '').trim());
     
     console.log("Found record:", record);
     if (!record) {
@@ -391,7 +391,7 @@ function showDebugInfo(){
         "Selected adress": selectedAdress,
         "Selected lgh": selectedLgh,
         "First 3 records": allData.slice(0, 3),
-        "Matching records": allData.filter(item => item.adress === selectedAdress && item.lgh === selectedLgh)
+        "Matching records": allData.filter(item => String(item.adress || '').trim() === String(selectedAdress || '').trim() && String(item.lgh || '').trim() === String(selectedLgh || '').trim())
     };
     
     debugDiv.textContent = JSON.stringify(info, null, 2);
