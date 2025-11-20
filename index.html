@@ -257,7 +257,7 @@ select:focus, input:focus {
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzPVS4sYK3Eezt3SMxDjQCybmquoAHXKt43R6l53OihLLyFpE3K6DgJYfMEONHhKsCN/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxd5A8t4eHkPwUM3ZTG4-lujGbAiW3jgq4qljZF2rmhA-YoV8RJNv5VIqHFAIrpuiRp/exec";
 let allData = [];
 
 async function loadData(){
@@ -363,6 +363,9 @@ async function save(){
             body: new URLSearchParams(body)
         });
 
+        // Ladda om data från servern för att få senaste informationen
+        await loadData();
+        
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
         
