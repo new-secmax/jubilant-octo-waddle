@@ -336,6 +336,11 @@ function getLgh(item) {
     return item[LGH_KEY] || item.lgh || item["Lägenhetsnummer"] || item["lägenhetsnummer"];
 }
 
+function normalizeAdress(value) {
+    if (value === "(Ingen adress)" || value == null) return "";
+    return String(value).trim();
+}
+
 async function loadData(){
     document.getElementById("loader").style.display="block";
     document.getElementById("app").style.display="none";
@@ -412,10 +417,12 @@ function filterAdress(){
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet
     );
-    // Inkludera även tomma adresser
-    const adresser = [...new Set(filtered.map(i=>i.adress || "(Ingen adress)"))];
+    // Inkludera även tomma adresser och normalisera "(Ingen adress)"
+    const adresser = [...new Set(
+        filtered.map(i => normalizeAdress(i.adress) || "(Ingen adress)")
+    )];
     fillSelect("adress", adresser);
-    
+
     // Nollställ efterföljande dropdowns
     fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
@@ -432,18 +439,18 @@ function filterLgh(){
         return;
     }
     
-    // Konvertera "(Ingen adress)" tillbaka till tom sträng för matchning
-    const actualAdress = adress === "(Ingen adress)" ? "" : adress;
+    // Normalisera adress för matchning (hanterar även "(Ingen adress)")
+    const actualAdress = normalizeAdress(adress);
     
     // Visa bara lägenhetsnummer som finns för detta uppdrag, fastighet OCH adress i datan
     const filtered = allData.filter(item => 
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet && 
-        (item.adress || "") === actualAdress
+        normalizeAdress(item.adress) === actualAdress
     );
     const lgh = [...new Set(filtered.map(i=>getLgh(i)).filter(Boolean))];
     fillSelect("lgh", lgh);
-    
+
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
 }
 
@@ -459,17 +466,17 @@ function updateLastChecked(){
         return;
     }
     
-    // Konvertera "(Ingen adress)" tillbaka till tom sträng för matchning
-    const actualAdress = selectedAdress === "(Ingen adress)" ? "" : selectedAdress;
+    // Normalisera adress för matchning (hanterar även "(Ingen adress)")
+    const actualAdress = normalizeAdress(selectedAdress);
     
     // Matcha med alla fält för att hitta exakt rätt post
     const record = allData.find(item => 
         item.uppdrag === uppdrag &&
         item.fastighet === fastighet &&
-        (item.adress || "") === actualAdress && 
+        normalizeAdress(item.adress) === actualAdress && 
         String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
     );
-    
+
     if (!record) {
         latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>';
         return;
@@ -510,10 +517,12 @@ async function save(){
     const dateStr = now.toISOString().split('T')[0];
     const timeStr = now.toTimeString().split(' ')[0];
 
+    const adressToSend = normalizeAdress(adress);
+
     const body = {
         uppdrag,
         fastighet,
-        adress,
+        adress: adressToSend,
         lgh,
         status,
         date: dateStr,
