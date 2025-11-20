@@ -5,15 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jordfelsbrytare Test</title>
 <meta name="description" content="Test och kontrollera jordfelsbrytare enkelt och effektivt">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#e0e0e0">
+<meta name="theme-color" content="#e8f4f8">
 
 <style>
 body { 
   margin:0; 
   padding:0; 
   font-family: "Segoe UI", sans-serif; 
-  background:#e0e0e0; 
+  background:#e8f4f8; 
   touch-action: manipulation;
 }
 
@@ -22,13 +21,14 @@ body {
   top:0; 
   width:100%; 
   text-align:center; 
-  padding:12px; 
-  font-size:18px; 
+  padding:16px; 
+  font-size:20px; 
   font-weight:bold; 
-  background:#e0e0e0; 
+  background:#e8f4f8; 
   z-index:1000; 
-  box-shadow: 3px 3px 8px #bebebe, -3px -3px 8px #ffffff; 
+  box-shadow: 3px 3px 8px #d0e5ed, -3px -3px 8px #ffffff; 
   border-radius:0 0 15px 15px; 
+  color:#3b6880;
 }
 
 .app { 
@@ -39,10 +39,10 @@ body {
 }
 
 .card { 
-  background:#e0e0e0; 
-  padding:15px; 
+  background:#e8f4f8; 
+  padding:18px; 
   border-radius:15px; 
-  box-shadow:6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
+  box-shadow:6px 6px 12px #d0e5ed,-6px -6px 12px #ffffff; 
   margin-bottom:15px; 
   opacity:0; 
   animation:fadeIn 0.7s ease forwards; 
@@ -51,54 +51,56 @@ body {
 label { 
   display:block; 
   font-weight:bold; 
-  margin-bottom:6px; 
-  color:#333; 
-  font-size:16px;
+  margin-bottom:8px; 
+  color:#3b6880; 
+  font-size:18px;
 }
 
 select, input { 
   width:100%; 
-  padding:10px; 
+  padding:16px; 
   border-radius:10px; 
   border:none; 
-  background:#e0e0e0; 
-  box-shadow: inset 3px 3px 6px #bebebe, inset -3px -3px 6px #ffffff; 
-  font-size:16px;
+  background:#e8f4f8; 
+  box-shadow: inset 3px 3px 6px #d0e5ed, inset -3px -3px 6px #ffffff; 
+  font-size:18px;
   margin-bottom:15px; 
-  color:#333;
+  color:#3b6880;
+  min-height:48px;
 }
 
 .last-checked-display {
-  padding:10px;
+  padding:16px;
   border-radius:10px;
-  background:#d9d9d9;
-  font-size:16px;
-  color:#333;
+  background:#dceef5;
+  font-size:18px;
+  color:#3b6880;
   margin-bottom:15px;
-  min-height:40px;
+  min-height:52px;
   display:flex;
   align-items:center;
 }
 
 .save-btn { 
   width:100%; 
-  background:#e0e0e0; 
-  font-size:17px; 
-  padding:12px; 
+  background:#e8f4f8; 
+  font-size:20px; 
+  padding:20px; 
   border-radius:15px; 
-  box-shadow: 6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
-  border:none; 
+  box-shadow: 6px 6px 12px #d0e5ed,-6px -6px 12px #ffffff; 
+  border:4px solid #70b5e0; 
   cursor:pointer; 
   font-weight:bold; 
-  color:#333;
+  color:#3b6880;
   opacity:0; 
   animation:fadeIn 1s ease forwards; 
   animation-delay:0.2s; 
   transition: all 0.15s ease;
+  min-height:56px;
 }
 
 .save-btn:active { 
-  box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+  box-shadow: inset 5px 5px 10px #d0e5ed, inset -5px -5px 10px #ffffff;
   transform: scale(0.98);
 }
 
@@ -117,24 +119,23 @@ select, input {
   height:50px; 
   margin:40px auto; 
   border-radius:50%; 
-  box-shadow:6px 6px 12px #bebebe,-6px -6px 12px #ffffff; 
+  box-shadow:6px 6px 12px #d0e5ed,-6px -6px 12px #ffffff; 
   animation:pulse 1.4s ease-in-out infinite; 
 }
 
 @keyframes pulse {
-  0%{transform:scale(1); box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff;}
-  50%{transform:scale(0.9); box-shadow:inset 6px 6px 10px #bebebe, inset -6px -6px 10px #ffffff;}
-  100%{transform:scale(1); box-shadow:8px 8px 15px #bebebe,-8px -8px 15px #ffffff;}
+  0%{transform:scale(1); box-shadow:8px 8px 15px #d0e5ed,-8px -8px 15px #ffffff;}
+  50%{transform:scale(0.9); box-shadow:inset 6px 6px 10px #d0e5ed, inset -6px -6px 10px #ffffff;}
+  100%{transform:scale(1); box-shadow:8px 8px 15px #d0e5ed,-8px -8px 15px #ffffff;}
 }
 
-/* Modal overlay for save confirmation */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(59, 104, 128, 0.3);
   display: none;
   align-items: center;
   justify-content: center;
@@ -147,10 +148,10 @@ select, input {
 }
 
 .modal-content {
-  background: #e0e0e0;
-  padding: 24px;
+  background: #e8f4f8;
+  padding: 28px;
   border-radius: 20px;
-  box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #ffffff;
+  box-shadow: 6px 6px 12px #d0e5ed, -6px -6px 12px #ffffff;
   text-align: center;
   animation: scaleIn 0.3s ease;
   max-width: 90%;
@@ -162,11 +163,11 @@ select, input {
 }
 
 .checkmark-circle {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   margin: 0 auto 12px;
   border-radius: 50%;
-  background: #45a049;
+  background: #70b5e0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,9 +194,9 @@ select, input {
 }
 
 .saved-text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
-  color: #333;
+  color: #3b6880;
 }
 </style>
 </head>
@@ -230,10 +231,9 @@ select, input {
 <div id="latest" class="last-checked-display"></div>
 </div>
 
-<button class="save-btn" onclick="save()">SPARA</button>
+<button class="save-btn" onclick="save()">SPARA TEST</button>
 </div>
 
-<!-- Save confirmation modal -->
 <div id="savedModal" class="modal-overlay">
 <div class="modal-content">
 <div class="checkmark-circle">
@@ -246,7 +246,7 @@ select, input {
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwd9BI7ixtgsuDxn7r-LfPHUlO4fk6TniBeGBtyTSgwCQW25c_LplGNLV4k9MPQpHA5/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxd5A8t4eHkPwUM3ZTG4-lujGbAiW3jgq4qljZF2rmhA-YoV8RJNv5VIqHFAIrpuiRp/exec";
 let allData = [];
 
 async function loadData(){
@@ -263,7 +263,6 @@ async function loadData(){
         fillSelect("adress",[...new Set(allData.map(i=>i.adress).filter(Boolean))]);
         fillSelect("lgh",[...new Set(allData.map(i=>i.lgh).filter(Boolean))]);
 
-        // Add event listeners to update last checked info
         document.getElementById("adress").addEventListener("change", updateLastChecked);
         document.getElementById("lgh").addEventListener("change", updateLastChecked);
     } catch (error) {
@@ -284,11 +283,9 @@ function updateLastChecked(){
         return;
     }
     
-    // Find the record for selected adress AND lägenhet
     const record = allData.find(item => item.adress === selectedAdress && item.lgh === selectedLgh);
     
     if (record && record.previousDate) {
-        // Show date from column E and status from column F
         const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
         latestDiv.textContent = `${record.previousDate}${statusText}`;
     } else {
@@ -297,68 +294,71 @@ function updateLastChecked(){
 }
 
 function fillSelect(id, arr){
-    const sel = document.getElementById(id);
-    sel.innerHTML = "<option value=''>Välj…</option>";
-    arr.forEach(v => { 
-        const o = document.createElement("option"); 
-        o.value = v; 
-        o.textContent = v; 
-        sel.appendChild(o); 
+    const s = document.getElementById(id);
+    s.innerHTML = '<option value="">Välj...</option>';
+    arr.forEach(v => {
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
+        s.appendChild(opt);
     });
 }
 
 async function save(){
-    const data = {
-        uppdrag: document.getElementById("uppdrag").value,
-        fastighet: document.getElementById("fastighet").value,
-        adress: document.getElementById("adress").value,
-        lgh: document.getElementById("lgh").value,
-        status: document.getElementById("status").value
-    };
-    
-    // Validate all fields are filled
-    if (!data.uppdrag || !data.fastighet || !data.adress || !data.lgh || !data.status) {
-        alert("Alla fält måste fyllas i!");
+    const uppdrag = document.getElementById("uppdrag").value;
+    const fastighet = document.getElementById("fastighet").value;
+    const adress = document.getElementById("adress").value;
+    const lgh = document.getElementById("lgh").value;
+    const status = document.getElementById("status").value;
+
+    if(!uppdrag || !fastighet || !adress || !lgh || !status){
+        alert("Fyll i alla fält!");
         return;
     }
-    
-    // Vibrate phone if supported
-    if (navigator.vibrate) {
-        navigator.vibrate(100);
-    }
-    
+
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0];
+    const timeStr = now.toTimeString().split(' ')[0];
+
+    const body = {
+        uppdrag,
+        fastighet,
+        adress,
+        lgh,
+        status,
+        date: dateStr,
+        time: timeStr
+    };
+
     try {
-        await fetch(API_URL, {method:"POST", body:JSON.stringify(data)});
-        
-        // Show modal with checkmark
+        await fetch(API_URL, {
+            method:"POST",
+            headers:{"Content-Type":"application/x-www-form-urlencoded"},
+            body: new URLSearchParams(body)
+        });
+
         const modal = document.getElementById("savedModal");
         modal.classList.add("show");
         
-        // Reset form
-        document.getElementById("uppdrag").value = "";
-        document.getElementById("fastighet").value = "";
-        document.getElementById("adress").value = "";
-        document.getElementById("lgh").value = "";
-        document.getElementById("status").value = "";
-        
-        // Clear last checked info
-        document.getElementById("latest").textContent = "";
-        
-        // Hide modal after 2 seconds
         setTimeout(() => {
             modal.classList.remove("show");
         }, 2000);
-    } catch (error) {
-        console.error("Error saving data:", error);
-        alert("Fel vid sparning. Försök igen.");
+
+        document.getElementById("uppdrag").selectedIndex = 0;
+        document.getElementById("fastighet").selectedIndex = 0;
+        document.getElementById("adress").selectedIndex = 0;
+        document.getElementById("lgh").selectedIndex = 0;
+        document.getElementById("status").selectedIndex = 0;
+        document.getElementById("latest").textContent = "";
+    } catch(err) {
+        alert("Kunde inte spara. Försök igen.");
     }
 }
 
 loadData();
 
-// REGISTER SERVICE WORKER
-if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./sw.js").catch(err => console.log("SW registration failed"));
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>
