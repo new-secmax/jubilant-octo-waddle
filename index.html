@@ -141,26 +141,74 @@ select:focus, input:focus {
   100%{transform:scale(1); box-shadow:8px 8px 15px #d0e5ed,-8px -8px 15px #ffffff;}
 }
 
-.toast {
+.modal-overlay {
   position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: #4ade80;
-  color: white;
-  padding: 16px 32px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  font-size: 18px;
-  font-weight: bold;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(59, 104, 128, 0.3);
+  display: none;
+  align-items: center;
+  justify-content: center;
   z-index: 9999;
-  opacity: 0;
-  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease;
 }
 
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #e8f4f8;
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 6px 6px 12px #d0e5ed, -6px -6px 12px #ffffff;
+  text-align: center;
+  animation: scaleIn 0.3s ease;
+  max-width: 90%;
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.checkmark-circle {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: #4ade80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmark {
+  width: 48px;
+  height: 48px;
+  stroke: white;
+  stroke-width: 4;
+  fill: none;
+  animation: checkmarkDraw 0.5s ease forwards;
+}
+
+@keyframes checkmarkDraw {
+  0% {
+    stroke-dasharray: 0, 100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dasharray: 100, 100;
+    opacity: 1;
+  }
+}
+
+.saved-text {
+  font-size: 22px;
+  font-weight: bold;
+  color: #3b6880;
 }
 </style>
 </head>
@@ -240,7 +288,16 @@ select:focus, input:focus {
 <button class="save-btn" onclick="save()">SPARA TEST</button>
 </div>
 
-<div id="toast" class="toast">✓ Sparat!</div>
+<div id="savedModal" class="modal-overlay">
+<div class="modal-content">
+<div class="checkmark-circle">
+<svg class="checkmark" viewBox="0 0 52 52">
+<polyline points="14,27 22,35 38,19" />
+</svg>
+</div>
+<p class="saved-text">Sparat!</p>
+</div>
+</div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzRsmS3W8ARaCHQHLcRMCC8uEHsYkHU1O-pq1xwnGZgKoBNLLH-ffyRKifFvbprMRDA/exec";
@@ -385,11 +442,11 @@ async function save(){
         // Uppdatera "Senast kontrollerad" med ny data
         updateLastChecked();
         
-        const toast = document.getElementById("toast");
-        toast.classList.add("show");
+        const modal = document.getElementById("savedModal");
+        modal.classList.add("show");
         
         setTimeout(() => {
-            toast.classList.remove("show");
+            modal.classList.remove("show");
         }, 2000);
 
         document.getElementById("uppdrag").selectedIndex = 0;
