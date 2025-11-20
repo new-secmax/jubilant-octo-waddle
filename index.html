@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -322,13 +321,9 @@ async function loadData(){
             console.log("🔍 FÖRSTA POSTEN (alla fält):", JSON.stringify(allData[0], null, 2));
             console.log("🔍 Alla fältnamn i första posten:", Object.keys(allData[0]));
         }
-
-        // Filtrera bort rader med tomma värden
-        allData = allData.filter(item => 
-            item.uppdrag && item.fastighet && item.adress && item.lgh
-        );
         
-        fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag))]);
+        // Visa alla unika uppdrag från datan
+        fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
         
         // Lägg till event listeners för kedjefiltrering
         document.getElementById("uppdrag").addEventListener("change", filterFastighet);
@@ -358,7 +353,7 @@ function filterFastighet(){
     
     // Visa bara fastigheter som finns för detta uppdrag i datan
     const filtered = allData.filter(item => item.uppdrag === uppdrag);
-    const fastigheter = [...new Set(filtered.map(i=>i.fastighet))];
+    const fastigheter = [...new Set(filtered.map(i=>i.fastighet).filter(Boolean))];
     fillSelect("fastighet", fastigheter);
     
     // Nollställ efterföljande dropdowns
@@ -383,7 +378,7 @@ function filterAdress(){
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet
     );
-    const adresser = [...new Set(filtered.map(i=>i.adress))];
+    const adresser = [...new Set(filtered.map(i=>i.adress).filter(Boolean))];
     fillSelect("adress", adresser);
     
     // Nollställ efterföljande dropdowns
@@ -408,7 +403,7 @@ function filterLgh(){
         item.fastighet === fastighet && 
         item.adress === adress
     );
-    const lgh = [...new Set(filtered.map(i=>i.lgh))];
+    const lgh = [...new Set(filtered.map(i=>i.lgh).filter(Boolean))];
     fillSelect("lgh", lgh);
     
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
