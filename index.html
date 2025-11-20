@@ -302,6 +302,39 @@ select:focus, input:focus {
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzRsmS3W8ARaCHQHLcRMCC8uEHsYkHU1O-pq1xwnGZgKoBNLLH-ffyRKifFvbprMRDA/exec";
 let allData = [];
+let LGH_KEY = "lgh";
+
+function detectLghKey() {
+    if (!allData.length) return;
+    const sample = allData[0] || {};
+    const knownKeys = ["uppdrag","fastighet","adress","status","date","time","previousDate","previousStatus"];
+    const keys = Object.keys(sample);
+
+    // Om "lgh" redan finns, använd den direkt
+    if (keys.includes("lgh")) {
+        LGH_KEY = "lgh";
+        return;
+    }
+
+    // Försök hitta ett fält som liknar lägenhetsnummer
+    const candidates = keys.filter(k => !knownKeys.includes(k) && /l.*gh|lägenhet|lagenhet/i.test(k));
+    if (candidates.length) {
+        LGH_KEY = candidates[0];
+        return;
+    }
+
+    // Fallback: ta första okända nyckeln
+    const fallback = keys.find(k => !knownKeys.includes(k));
+    if (fallback) {
+        LGH_KEY = fallback;
+    }
+
+    console.log("🔑 Upptäckt fält för lägenhetsnummer:", LGH_KEY);
+}
+
+function getLgh(item) {
+    return item[LGH_KEY] || item.lgh || item["Lägenhetsnummer"] || item["lägenhetsnummer"];
+}
 
 async function loadData(){
     document.getElementById("loader").style.display="block";
@@ -311,7 +344,8 @@ async function loadData(){
         const res = await fetch(API_URL);
         const json = await res.json();
         allData = json.data || [];
-
+        detectLghKey();
+        
         // DEBUG: Visa hela JSON-svaret
         console.log("📦 FULL JSON RESPONSE:", JSON.stringify(json, null, 2));
         console.log("📊 Total antal poster:", allData.length);
@@ -378,7 +412,8 @@ function filterAdress(){
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet
     );
-    const adresser = [...new Set(filtered.map(i=>i.adress).filter(Boolean))];
+    // Inkludera även tomma adresser
+    const adresser = [...new Set(filtered.map(i=>i.adress || "(Ingen adress)"))];
     fillSelect("adress", adresser);
     
     // Nollställ efterföljande dropdowns
@@ -397,13 +432,16 @@ function filterLgh(){
         return;
     }
     
+    // Konvertera "(Ingen adress)" tillbaka till tom sträng för matchning
+    const actualAdress = adress === "(Ingen adress)" ? "" : adress;
+    
     // Visa bara lägenhetsnummer som finns för detta uppdrag, fastighet OCH adress i datan
     const filtered = allData.filter(item => 
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet && 
-        item.adress === adress
+        (item.adress || "") === actualAdress
     );
-    const lgh = [...new Set(filtered.map(i=>i.lgh).filter(Boolean))];
+    const lgh = [...new Set(filtered.map(i=>getLgh(i)).filter(Boolean))];
     fillSelect("lgh", lgh);
     
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
@@ -421,12 +459,15 @@ function updateLastChecked(){
         return;
     }
     
+    // Konvertera "(Ingen adress)" tillbaka till tom sträng för matchning
+    const actualAdress = selectedAdress === "(Ingen adress)" ? "" : selectedAdress;
+    
     // Matcha med alla fält för att hitta exakt rätt post
     const record = allData.find(item => 
         item.uppdrag === uppdrag &&
         item.fastighet === fastighet &&
-        String(item.adress || '').trim() === String(selectedAdress || '').trim() && 
-        Number(item.lgh) === Number(selectedLgh)
+        (item.adress || "") === actualAdress && 
+        String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
     );
     
     if (!record) {
