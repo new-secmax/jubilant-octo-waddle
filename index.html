@@ -361,6 +361,21 @@ async function loadData(){
             console.log("🔍 Alla fältnamn i första posten:", Object.keys(allData[0]));
         }
         
+        // 🚨 SPECIAL DEBUG FÖR JÄRFÄLLA
+        const jarfallaData = allData.filter(item => 
+            item.fastighet && item.fastighet.includes("Järfälla")
+        );
+        if (jarfallaData.length > 0) {
+            console.log("🚨 JÄRFÄLLA DEBUG - Antal poster:", jarfallaData.length);
+            console.log("🚨 JÄRFÄLLA första 3 posterna:", JSON.stringify(jarfallaData.slice(0, 3), null, 2));
+            console.log("🚨 LGH-värden för Järfälla:", jarfallaData.map(i => ({
+                adress: i.adress,
+                lgh: getLgh(i),
+                rawLgh: i.lgh,
+                allKeys: Object.keys(i)
+            })).slice(0, 5));
+        }
+        
         // Visa alla unika uppdrag från datan
         fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
         
