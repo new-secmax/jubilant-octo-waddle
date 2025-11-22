@@ -5,15 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jordfelsbrytare</title>
 <meta name="description" content="Test och kontrollera jordfelsbrytare enkelt och effektivt">
-<meta name="theme-color" content="#e8f4f8">
+<meta name="theme-color" content="#1a1a2e">
 
 <style>
+:root {
+  --primary: #0f3460;
+  --secondary: #16213e;
+  --accent: #e94560;
+  --text: #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --border-radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body { 
   margin:0; 
   padding:0; 
-  font-family: "Segoe UI", sans-serif; 
-  background:#e8f4f8; 
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: var(--text);
   touch-action: manipulation;
+  min-height: 100vh;
+  line-height: 1.6;
 }
 
 .topbar { 
@@ -21,99 +39,124 @@ body {
   top:0; 
   width:100%; 
   text-align:center; 
-  padding:12px; 
+  padding: 16px 12px;
   font-size:20px; 
-  font-weight:bold; 
-  background:#e8f4f8; 
+  font-weight:700; 
+  background: rgba(15, 52, 96, 0.8);
+  backdrop-filter: blur(10px);
   z-index:1000; 
-  box-shadow: 3px 3px 8px #d0e5ed, -3px -3px 8px #ffffff; 
-  border-radius:0 0 15px 15px; 
-  color:#3b6880;
+  box-shadow: var(--shadow);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  letter-spacing: 0.5px;
 }
 
 .app { 
   max-width:100%; 
-  margin:30px auto 10px; 
+  margin:20px auto 10px; 
   display:none; 
-  padding: 0 12px;
+  padding: 0 16px;
 }
 
 .card { 
-  background:#e8f4f8; 
-  padding:12px; 
-  border-radius:15px; 
-  box-shadow:6px 6px 12px #d0e5ed,-6px -6px 12px #ffffff; 
-  margin-bottom:10px; 
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
   opacity:0; 
-  animation:fadeIn 0.7s ease forwards; 
+  animation:fadeIn 0.7s ease forwards;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 label { 
   display:block; 
-  font-weight:bold; 
-  margin-bottom:6px; 
-  color:#3b6880; 
-  font-size:18px;
+  font-weight:600; 
+  margin-bottom:8px; 
+  color: var(--text);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 select, input { 
   width:100%; 
-  padding:14px; 
-  border-radius:10px; 
-  border:2px solid #5a9fc7; 
-  background:#e8f4f8; 
-  box-shadow: inset 3px 3px 6px #d0e5ed, inset -3px -3px 6px #ffffff; 
-  font-size:18px;
+  padding:16px; 
+  border-radius:12px; 
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  font-size:16px;
   margin-bottom:10px; 
-  color:#3b6880;
-  min-height:48px;
-  font-weight:bold;
+  min-height:52px;
+  font-weight:500;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f0f0f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
 }
 
 select:focus, input:focus {
   outline:none;
-  border-color:#4a89b0;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
 }
 
 .last-checked-display {
-  padding:14px;
-  border-radius:10px;
-  background:#e8f4f8;
-  box-shadow: inset 3px 3px 6px #d0e5ed, inset -3px -3px 6px #ffffff;
-  font-size:18px;
-  color:#3b6880;
+  padding:16px;
+  border-radius:12px;
+  background: rgba(0, 0, 0, 0.2);
+  font-size:16px;
+  color: var(--text);
   margin-bottom:10px;
   display:flex;
   align-items:center;
-  font-weight:bold;
-  border:2px solid #5a9fc7;
+  font-weight:500;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  min-height: 52px;
 }
 
 .save-btn { 
   width:100%; 
-  background:#e8f4f8; 
-  font-size:20px; 
-  padding:16px; 
-  border-radius:15px; 
-  box-shadow: 6px 6px 12px #d0e5ed,-6px -6px 12px #ffffff; 
-  border:4px solid #70b5e0; 
+  background: var(--accent);
+  font-size:18px; 
+  padding:18px; 
+  border-radius:var(--border-radius); 
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+  border: none;
   cursor:pointer; 
-  font-weight:bold; 
-  color:#3b6880;
+  font-weight:700; 
+  color: white;
   opacity:0; 
   animation:fadeIn 1s ease forwards; 
   animation-delay:0.2s; 
-  transition: all 0.15s ease;
-  min-height:56px;
+  transition: all 0.3s ease;
+  min-height:60px;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
 }
 
 .save-btn:active { 
-  box-shadow: inset 5px 5px 10px #d0e5ed, inset -5px -5px 10px #ffffff;
-  transform: scale(0.98);
+  transform: translateY(2px);
+  box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+}
+
+.save-btn:disabled {
+  background: rgba(233, 69, 96, 0.5);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .fade-in { 
@@ -127,18 +170,18 @@ select:focus, input:focus {
 }
 
 .loader { 
-  width:50px; 
-  height:50px; 
-  margin:40px auto; 
+  width:60px; 
+  height:60px; 
+  margin:60px auto; 
   border-radius:50%; 
-  box-shadow:6px 6px 12px #d0e5ed,-6px -6px 12px #ffffff; 
-  animation:pulse 1.4s ease-in-out infinite; 
+  border: 4px solid rgba(15, 52, 96, 0.3);
+  border-top: 4px solid var(--accent);
+  animation: spin 1s linear infinite;
 }
 
-@keyframes pulse {
-  0%{transform:scale(1); box-shadow:8px 8px 15px #d0e5ed,-8px -8px 15px #ffffff;}
-  50%{transform:scale(0.9); box-shadow:inset 6px 6px 10px #d0e5ed, inset -6px -6px 10px #ffffff;}
-  100%{transform:scale(1); box-shadow:8px 8px 15px #d0e5ed,-8px -8px 15px #ffffff;}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .modal-overlay {
@@ -147,12 +190,13 @@ select:focus, input:focus {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(59, 104, 128, 0.3);
+  background: rgba(0, 0, 0, 0.7);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   animation: fadeIn 0.3s ease;
+  padding: 20px;
 }
 
 .modal-overlay.show {
@@ -160,13 +204,15 @@ select:focus, input:focus {
 }
 
 .modal-content {
-  background: #e8f4f8;
-  padding: 28px;
-  border-radius: 20px;
-  box-shadow: 6px 6px 12px #d0e5ed, -6px -6px 12px #ffffff;
+  background: var(--secondary);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
   text-align: center;
   animation: scaleIn 0.3s ease;
   max-width: 90%;
+  width: 320px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes scaleIn {
@@ -177,17 +223,18 @@ select:focus, input:focus {
 .checkmark-circle {
   width: 80px;
   height: 80px;
-  margin: 0 auto 12px;
+  margin: 0 auto 20px;
   border-radius: 50%;
-  background: #4ade80;
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
 }
 
 .checkmark {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   stroke: white;
   stroke-width: 4;
   fill: none;
@@ -208,60 +255,152 @@ select:focus, input:focus {
 .saved-text {
   font-size: 22px;
   font-weight: bold;
-  color: #3b6880;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.saved-subtext {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--accent);
+  stroke-width: 2;
+  fill: none;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.status-ok {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+.status-not-available {
+  background: rgba(255, 152, 0, 0.2);
+  color: #FF9800;
+}
+
+.status-fault {
+  background: rgba(244, 67, 54, 0.2);
+  color: #F44336;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+  }
+  
+  select, input {
+    padding: 14px;
+    font-size: 16px;
+  }
+  
+  .save-btn {
+    padding: 16px;
+    font-size: 16px;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(233, 69, 96, 0.8);
 }
 </style>
 </head>
 
 <body>
 <div class="topbar">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
     <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
   </svg>
-  Jordfelsbrytare
+  Jordfelsbrytare Kontroll
 </div>
 <div id="loader" class="loader"></div>
 
 <div class="app" id="app">
 <div class="card">
+<div class="form-group">
 <label>
-  <svg style="display:inline-block; vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
   </svg>
   Uppdrag
 </label>
 <select id="uppdrag"></select>
+</div>
 
+<div class="form-group">
 <label>
-  <svg style="display:inline-block; vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
     <polyline points="9 22 9 12 15 12 15 22"/>
   </svg>
   Fastighet
 </label>
 <select id="fastighet"></select>
+</div>
 
+<div class="form-group">
 <label>
-  <svg style="display:inline-block; vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
     <circle cx="12" cy="10" r="3"/>
   </svg>
   Adress
 </label>
 <select id="adress"></select>
+</div>
 
+<div class="form-group">
 <label>
-  <svg style="display:inline-block; vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
   </svg>
   Lägenhetsnummer
 </label>
 <select id="lgh"></select>
+</div>
 
+<div class="form-group">
 <label>
-  <svg style="display:inline-block; vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
     <polyline points="20 6 9 17 4 12"/>
   </svg>
   Status
@@ -272,9 +411,11 @@ select:focus, input:focus {
 <option value="Ej tillgänglig">Ej tillgänglig</option>
 <option value="Funktionsfel">Funktionsfel</option>
 </select>
+</div>
 
+<div class="form-group">
 <label>
-  <svg style="display:inline-block; vertical-align:middle; margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
     <line x1="16" y1="2" x2="16" y2="6"/>
     <line x1="8" y1="2" x2="8" y2="6"/>
@@ -284,8 +425,13 @@ select:focus, input:focus {
 </label>
 <div id="latest" class="last-checked-display"></div>
 </div>
+</div>
 
-<button class="save-btn" onclick="save()">SPARA TEST</button>
+<button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
+
+<div class="footer">
+  Jordfelsbrytare Kontroll &copy; 2023
+</div>
 </div>
 
 <div id="savedModal" class="modal-overlay">
@@ -295,7 +441,8 @@ select:focus, input:focus {
 <polyline points="14,27 22,35 38,19" />
 </svg>
 </div>
-<p class="saved-text">Sparat!</p>
+<p class="saved-text">Testresultat Sparat!</p>
+<p class="saved-subtext">Informationen har uppdaterats</p>
 </div>
 </div>
 
@@ -385,6 +532,13 @@ async function loadData(){
         document.getElementById("adress").addEventListener("change", filterLgh);
         document.getElementById("lgh").addEventListener("change", updateLastChecked);
         
+        // Validera formuläret när något ändras
+        document.getElementById("uppdrag").addEventListener("change", validateForm);
+        document.getElementById("fastighet").addEventListener("change", validateForm);
+        document.getElementById("adress").addEventListener("change", validateForm);
+        document.getElementById("lgh").addEventListener("change", validateForm);
+        document.getElementById("status").addEventListener("change", validateForm);
+        
         console.log("✅ Data loaded, event listeners attached");
     } catch (error) {
         console.error("❌ Error loading data:", error);
@@ -402,6 +556,7 @@ function filterFastighet(){
         fillSelect("adress", []);
         fillSelect("lgh", []);
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+        validateForm();
         return;
     }
     
@@ -414,6 +569,7 @@ function filterFastighet(){
     fillSelect("adress", []);
     fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+    validateForm();
 }
 
 function filterAdress(){
@@ -424,6 +580,7 @@ function filterAdress(){
         fillSelect("adress", []);
         fillSelect("lgh", []);
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+        validateForm();
         return;
     }
     
@@ -441,6 +598,7 @@ function filterAdress(){
     // Nollställ efterföljande dropdowns
     fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+    validateForm();
 }
 
 function filterLgh(){
@@ -451,6 +609,7 @@ function filterLgh(){
     if (!uppdrag || !fastighet || !adress) {
         fillSelect("lgh", []);
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+        validateForm();
         return;
     }
     
@@ -477,6 +636,7 @@ function filterLgh(){
     fillSelect("lgh", lgh);
 
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+    validateForm();
 }
 
 function updateLastChecked(){
@@ -538,6 +698,21 @@ function fillSelect(id, arr){
     });
 }
 
+function validateForm() {
+    const uppdrag = document.getElementById("uppdrag").value;
+    const fastighet = document.getElementById("fastighet").value;
+    const adress = document.getElementById("adress").value;
+    const lgh = document.getElementById("lgh").value;
+    const status = document.getElementById("status").value;
+    const saveBtn = document.getElementById("saveBtn");
+    
+    if(uppdrag && fastighet && adress && lgh && status) {
+        saveBtn.disabled = false;
+    } else {
+        saveBtn.disabled = true;
+    }
+}
+
 async function save(){
     const uppdrag = document.getElementById("uppdrag").value;
     const fastighet = document.getElementById("fastighet").value;
@@ -567,6 +742,11 @@ async function save(){
     };
 
     try {
+        // Visa laddningsindikator på knappen
+        const saveBtn = document.getElementById("saveBtn");
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = "SPARAR...";
+        
         await fetch(API_URL, {
             method:"POST",
             headers:{"Content-Type":"application/x-www-form-urlencoded"},
@@ -586,18 +766,26 @@ async function save(){
             modal.classList.remove("show");
         }, 2000);
 
+        // Återställ formuläret
         document.getElementById("uppdrag").selectedIndex = 0;
         document.getElementById("fastighet").selectedIndex = 0;
         document.getElementById("adress").selectedIndex = 0;
         document.getElementById("lgh").selectedIndex = 0;
         document.getElementById("status").selectedIndex = 0;
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
+        
+        // Återställ knappen
+        saveBtn.innerHTML = "SPARA TEST";
+        validateForm();
     } catch(err) {
         alert("Kunde inte spara. Försök igen.");
+        const saveBtn = document.getElementById("saveBtn");
+        saveBtn.innerHTML = "SPARA TEST";
+        validateForm();
     }
 }
 
-
+// Initiera appen
 loadData();
 
 if('serviceWorker' in navigator){
