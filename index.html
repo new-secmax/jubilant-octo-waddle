@@ -138,10 +138,10 @@ select:focus, input:focus {
 }
 
 .save-btn { 
-  flex: 1; /* Tar upp resterande utrymme */
+  flex: 1;
   background: var(--accent);
-  font-size:22px; /* Lite mindre text */
-  padding:20px; /* Lite mindre padding */
+  font-size:22px;
+  padding:20px;
   border-radius:var(--border-radius); 
   box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
   border: none;
@@ -157,7 +157,7 @@ select:focus, input:focus {
 }
 
 .ms-btn {
-  width: 25%; /* Ungefär en fjärdedel av bredden */
+  width: 25%;
   background: var(--ms-color);
   font-size:18px;
   padding:20px 10px;
@@ -192,6 +192,109 @@ select:focus, input:focus {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+/* NUMERISKT TANGENTBORD */
+.numeric-keyboard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+  padding: 20px;
+}
+
+.numeric-keyboard-overlay.show {
+  display: flex;
+}
+
+.numeric-keyboard {
+  background: var(--secondary);
+  padding: 25px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.keyboard-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.keyboard-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.keyboard-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.keyboard-display {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.keyboard-key {
+  flex: 1;
+  background: var(--primary);
+  border: none;
+  border-radius: 12px;
+  padding: 20px 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 70px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.keyboard-key:active {
+  background: var(--accent);
+  transform: translateY(2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.keyboard-key.wide {
+  flex: 2;
+}
+
+.keyboard-key.clear {
+  background: #f44336;
+}
+
+.keyboard-key.submit {
+  background: var(--accent);
+  font-size: 20px;
 }
 
 .fade-in { 
@@ -390,6 +493,26 @@ select:focus, input:focus {
   .saved-text {
     font-size: 26px;
   }
+  
+  .numeric-keyboard {
+    padding: 20px;
+  }
+  
+  .keyboard-key {
+    padding: 16px 8px;
+    font-size: 20px;
+    min-height: 60px;
+  }
+  
+  .keyboard-display {
+    font-size: 24px;
+    padding: 16px;
+    min-height: 60px;
+  }
+  
+  .keyboard-title {
+    font-size: 22px;
+  }
 }
 
 /* Custom scrollbar */
@@ -523,13 +646,47 @@ select option {
 
 <!-- NY KNAPP-LAYOUT -->
 <div class="buttons-container">
-  <button class="ms-btn" id="msBtn" onclick="handleMsButton()">ms</button>
+  <button class="ms-btn" id="msBtn" onclick="openNumericKeyboard()">ms</button>
   <button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
 </div>
 
 <div class="footer">
   Jordfelsbrytare Kontroll &copy; 2023
 </div>
+</div>
+
+<!-- NUMERISKT TANGENTBORD -->
+<div id="numericKeyboard" class="numeric-keyboard-overlay">
+  <div class="numeric-keyboard">
+    <div class="keyboard-header">
+      <div class="keyboard-title">Ange millisekunder</div>
+      <div class="keyboard-subtitle">Skriv in ditt mätvärde</div>
+    </div>
+    <div class="keyboard-display" id="keyboardDisplay">0</div>
+    <div class="keyboard-row">
+      <button class="keyboard-key" onclick="addNumber(1)">1</button>
+      <button class="keyboard-key" onclick="addNumber(2)">2</button>
+      <button class="keyboard-key" onclick="addNumber(3)">3</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="keyboard-key" onclick="addNumber(4)">4</button>
+      <button class="keyboard-key" onclick="addNumber(5)">5</button>
+      <button class="keyboard-key" onclick="addNumber(6)">6</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="keyboard-key" onclick="addNumber(7)">7</button>
+      <button class="keyboard-key" onclick="addNumber(8)">8</button>
+      <button class="keyboard-key" onclick="addNumber(9)">9</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="keyboard-key" onclick="addNumber(0)">0</button>
+      <button class="keyboard-key" onclick="addDecimal()">.</button>
+      <button class="keyboard-key clear" onclick="clearDisplay()">C</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="keyboard-key wide submit" onclick="submitNumber()">Klar</button>
+    </div>
+  </div>
 </div>
 
 <div id="savedModal" class="modal-overlay">
@@ -548,6 +705,51 @@ select option {
 const API_URL = "https://script.google.com/macros/s/AKfycbzRsmS3W8ARaCHQHLcRMCC8uEHsYkHU1O-pq1xwnGZgKoBNLLH-ffyRKifFvbprMRDA/exec";
 let allData = [];
 let LGH_KEY = "lgh";
+let currentNumber = "0";
+let msValue = null;
+
+// NUMERISKT TANGENTBORD FUNKTIONER
+function openNumericKeyboard() {
+    currentNumber = msValue ? msValue.toString() : "0";
+    document.getElementById('keyboardDisplay').textContent = currentNumber;
+    document.getElementById('numericKeyboard').classList.add('show');
+}
+
+function closeNumericKeyboard() {
+    document.getElementById('numericKeyboard').classList.remove('show');
+}
+
+function addNumber(number) {
+    if (currentNumber === "0") {
+        currentNumber = number.toString();
+    } else {
+        currentNumber += number.toString();
+    }
+    document.getElementById('keyboardDisplay').textContent = currentNumber;
+}
+
+function addDecimal() {
+    if (!currentNumber.includes('.')) {
+        currentNumber += '.';
+        document.getElementById('keyboardDisplay').textContent = currentNumber;
+    }
+}
+
+function clearDisplay() {
+    currentNumber = "0";
+    document.getElementById('keyboardDisplay').textContent = currentNumber;
+}
+
+function submitNumber() {
+    const numberValue = parseFloat(currentNumber);
+    msValue = numberValue;
+    
+    // Uppdatera MS-knappens text
+    const msBtn = document.getElementById('msBtn');
+    msBtn.textContent = `${numberValue}ms`;
+    
+    closeNumericKeyboard();
+}
 
 function detectLghKey() {
     if (!allData.length) return;
@@ -555,20 +757,17 @@ function detectLghKey() {
     const knownKeys = ["uppdrag","fastighet","adress","status","date","time","previousDate","previousStatus"];
     const keys = Object.keys(sample);
 
-    // Om "lgh" redan finns, använd den direkt
     if (keys.includes("lgh")) {
         LGH_KEY = "lgh";
         return;
     }
 
-    // Försök hitta ett fält som liknar lägenhetsnummer
     const candidates = keys.filter(k => !knownKeys.includes(k) && /l.*gh|lägenhet|lagenhet/i.test(k));
     if (candidates.length) {
         LGH_KEY = candidates[0];
         return;
     }
 
-    // Fallback: ta första okända nyckeln
     const fallback = keys.find(k => !knownKeys.includes(k));
     if (fallback) {
         LGH_KEY = fallback;
@@ -586,12 +785,6 @@ function normalizeAdress(value) {
     return String(value).trim();
 }
 
-// NY FUNKTION FÖR MS-KNAPPEN
-function handleMsButton() {
-    alert("MS-knappen är klickad! Lägg till önskad funktionalitet här.");
-    // Här kan du lägga till den funktionalitet du vill ha för MS-knappen
-}
-
 async function loadData(){
     document.getElementById("loader").style.display="block";
     document.getElementById("app").style.display="none";
@@ -602,41 +795,29 @@ async function loadData(){
         allData = json.data || [];
         detectLghKey();
         
-        // DEBUG: Visa hela JSON-svaret
         console.log("📦 FULL JSON RESPONSE:", JSON.stringify(json, null, 2));
         console.log("📊 Total antal poster:", allData.length);
         
-        // DEBUG: Visa första posten i detalj
         if (allData.length > 0) {
             console.log("🔍 FÖRSTA POSTEN (alla fält):", JSON.stringify(allData[0], null, 2));
             console.log("🔍 Alla fältnamn i första posten:", Object.keys(allData[0]));
         }
         
-        // 🚨 SPECIAL DEBUG FÖR JÄRFÄLLA
         const jarfallaData = allData.filter(item => 
             item.fastighet && item.fastighet.includes("Järfälla")
         );
         if (jarfallaData.length > 0) {
             console.log("🚨 JÄRFÄLLA DEBUG - Antal poster:", jarfallaData.length);
             console.log("🚨 JÄRFÄLLA första 3 posterna:", JSON.stringify(jarfallaData.slice(0, 3), null, 2));
-            console.log("🚨 LGH-värden för Järfälla:", jarfallaData.map(i => ({
-                adress: i.adress,
-                lgh: getLgh(i),
-                rawLgh: i.lgh,
-                allKeys: Object.keys(i)
-            })).slice(0, 5));
         }
         
-        // Visa alla unika uppdrag från datan
         fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
         
-        // Lägg till event listeners för kedjefiltrering
         document.getElementById("uppdrag").addEventListener("change", filterFastighet);
         document.getElementById("fastighet").addEventListener("change", filterAdress);
         document.getElementById("adress").addEventListener("change", filterLgh);
         document.getElementById("lgh").addEventListener("change", updateLastChecked);
         
-        // Validera formuläret när något ändras
         document.getElementById("uppdrag").addEventListener("change", validateForm);
         document.getElementById("fastighet").addEventListener("change", validateForm);
         document.getElementById("adress").addEventListener("change", validateForm);
@@ -664,12 +845,10 @@ function filterFastighet(){
         return;
     }
     
-    // Visa bara fastigheter som finns för detta uppdrag i datan
     const filtered = allData.filter(item => item.uppdrag === uppdrag);
     const fastigheter = [...new Set(filtered.map(i=>i.fastighet).filter(Boolean))];
     fillSelect("fastighet", fastigheter);
     
-    // Nollställ efterföljande dropdowns
     fillSelect("adress", []);
     fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
@@ -688,18 +867,15 @@ function filterAdress(){
         return;
     }
     
-    // Visa bara adresser som finns för detta uppdrag OCH fastighet i datan
     const filtered = allData.filter(item => 
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet
     );
-    // Inkludera även tomma adresser och normalisera "(Ingen adress)"
     const adresser = [...new Set(
         filtered.map(i => normalizeAdress(i.adress) || "(Ingen adress)")
     )];
     fillSelect("adress", adresser);
 
-    // Nollställ efterföljande dropdowns
     fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
     validateForm();
@@ -717,17 +893,14 @@ function filterLgh(){
         return;
     }
     
-    // Normalisera adress för matchning (hanterar även "(Ingen adress)")
     const actualAdress = normalizeAdress(adress);
     
-    // Försök först matcha på uppdrag + fastighet + adress
     let filtered = allData.filter(item => 
         item.uppdrag === uppdrag && 
         item.fastighet === fastighet && 
         normalizeAdress(item.adress) === actualAdress
     );
 
-    // Om inget hittades (t.ex. pga mellanslag eller stavfel), falla tillbaka till bara uppdrag + fastighet
     if (!filtered.length) {
         filtered = allData.filter(item => 
             item.uppdrag === uppdrag &&
@@ -755,10 +928,8 @@ function updateLastChecked(){
         return;
     }
     
-    // Normalisera adress för matchning (hanterar även "(Ingen adress)")
     const actualAdress = normalizeAdress(selectedAdress);
     
-    // Matcha med alla fält för att hitta exakt rätt post (inkl. adress)
     let record = allData.find(item => 
         item.uppdrag === uppdrag &&
         item.fastighet === fastighet &&
@@ -766,7 +937,6 @@ function updateLastChecked(){
         String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
     );
 
-    // Om ingen post hittas (t.ex. pga avvikande adressvärde), försök utan adressmatchning
     if (!record) {
         record = allData.find(item => 
             item.uppdrag === uppdrag &&
@@ -845,8 +1015,12 @@ async function save(){
         time: timeStr
     };
 
+    // Lägg till MS-värdet om det finns
+    if (msValue !== null) {
+        body.ms = msValue;
+    }
+
     try {
-        // Visa laddningsindikator på knappen
         const saveBtn = document.getElementById("saveBtn");
         saveBtn.disabled = true;
         saveBtn.innerHTML = "SPARAR...";
@@ -857,20 +1031,17 @@ async function save(){
             body: new URLSearchParams(body)
         });
 
-        // Ladda om data från servern för att få senaste informationen
         await loadData();
-        
-        // Uppdatera "Senast kontrollerad" med ny data
         updateLastChecked();
         
         const modal = document.getElementById("savedModal");
-        modal.classList.add("show");
+        modal.classList.add('show');
         
         setTimeout(() => {
-            modal.classList.remove("show");
+            modal.classList.remove('show');
         }, 2000);
 
-        // Återställ formuläret
+        // Återställ formuläret och MS-värdet
         document.getElementById("uppdrag").selectedIndex = 0;
         document.getElementById("fastighet").selectedIndex = 0;
         document.getElementById("adress").selectedIndex = 0;
@@ -878,7 +1049,10 @@ async function save(){
         document.getElementById("status").selectedIndex = 0;
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
         
-        // Återställ knappen
+        // Återställ MS-knappen
+        msValue = null;
+        document.getElementById('msBtn').textContent = 'ms';
+        
         saveBtn.innerHTML = "SPARA TEST";
         validateForm();
     } catch(err) {
