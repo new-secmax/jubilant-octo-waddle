@@ -1015,7 +1015,7 @@ async function save(){
         time: timeStr
     };
 
-    // Lägg till MS-värdet om det finns
+    // Lägg till MS-värdet i kolumn G
     if (msValue !== null) {
         body.ms = msValue;
     }
@@ -1025,12 +1025,17 @@ async function save(){
         saveBtn.disabled = true;
         saveBtn.innerHTML = "SPARAR...";
         
-        await fetch(API_URL, {
+        console.log("📤 Skickar data till Google Sheets:", body);
+        
+        const response = await fetch(API_URL, {
             method:"POST",
             headers:{"Content-Type":"application/x-www-form-urlencoded"},
             body: new URLSearchParams(body)
         });
 
+        const result = await response.json();
+        console.log("✅ Svar från Google Sheets:", result);
+        
         await loadData();
         updateLastChecked();
         
@@ -1056,6 +1061,7 @@ async function save(){
         saveBtn.innerHTML = "SPARA TEST";
         validateForm();
     } catch(err) {
+        console.error("❌ Fel vid sparande:", err);
         alert("Kunde inte spara. Försök igen.");
         const saveBtn = document.getElementById("saveBtn");
         saveBtn.innerHTML = "SPARA TEST";
