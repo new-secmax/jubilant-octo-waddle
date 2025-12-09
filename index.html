@@ -1015,9 +1015,9 @@ async function save(){
         time: timeStr
     };
 
-    // Lägg till mA-värdet i kolumn G
+    // Lägg till mA-värdet i kolumn G (skickas som "ms" till Google Apps Script)
     if (maValue !== null) {
-        body.mA = maValue;
+        body.ms = maValue;
     }
 
     try {
