@@ -129,7 +129,6 @@ select:focus, input:focus {
   min-height: 64px;
 }
 
-/* NY LAYOUT FÖR KNAPPARNA */
 .buttons-container {
   display: flex;
   gap: 12px;
@@ -194,7 +193,6 @@ select:focus, input:focus {
   box-shadow: none;
 }
 
-/* NUMERISKT TANGENTBORD */
 .numeric-keyboard-overlay {
   position: fixed;
   top: 0;
@@ -444,7 +442,6 @@ select:focus, input:focus {
   margin-top: 16px;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   body {
     font-size: 18px;
@@ -515,7 +512,6 @@ select:focus, input:focus {
   }
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -533,13 +529,11 @@ select:focus, input:focus {
   background: rgba(46, 125, 50, 0.8);
 }
 
-/* Fokusindikator för tillgänglighet */
 select:focus, input:focus, button:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Förbättring för dropdown-menyer */
 select option {
   background: var(--secondary);
   color: var(--text);
@@ -644,7 +638,6 @@ select option {
 </div>
 </div>
 
-<!-- NY KNAPP-LAYOUT -->
 <div class="buttons-container">
   <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard()">mA</button>
   <button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
@@ -655,7 +648,6 @@ select option {
 </div>
 </div>
 
-<!-- NUMERISKT TANGENTBORD -->
 <div id="numericKeyboard" class="numeric-keyboard-overlay">
   <div class="numeric-keyboard">
     <div class="keyboard-header">
@@ -708,7 +700,6 @@ let LGH_KEY = "lgh";
 let currentNumber = "0";
 let maValue = null;
 
-// NUMERISKT TANGENTBORD FUNKTIONER
 function openNumericKeyboard() {
     currentNumber = maValue ? maValue.toString() : "0";
     document.getElementById('keyboardDisplay').textContent = currentNumber;
@@ -743,11 +734,8 @@ function clearDisplay() {
 function submitNumber() {
     const numberValue = parseFloat(currentNumber);
     maValue = numberValue;
-    
-    // Uppdatera mA-knappens text
     const maBtn = document.getElementById('maBtn');
     maBtn.textContent = `${numberValue} mA`;
-    
     closeNumericKeyboard();
 }
 
@@ -1015,9 +1003,9 @@ async function save(){
         time: timeStr
     };
 
-    // Lägg till mA-värdet i kolumn G (skickas som "ms" till Google Apps Script)
+    // Lägg till mA-värdet i kolumn G
     if (maValue !== null) {
-        body.ms = maValue;
+        body.mA = maValue;
     }
 
     try {
@@ -1046,7 +1034,6 @@ async function save(){
             modal.classList.remove('show');
         }, 2000);
 
-        // Återställ formuläret och mA-värdet
         document.getElementById("uppdrag").selectedIndex = 0;
         document.getElementById("fastighet").selectedIndex = 0;
         document.getElementById("adress").selectedIndex = 0;
@@ -1054,7 +1041,6 @@ async function save(){
         document.getElementById("status").selectedIndex = 0;
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
         
-        // Återställ mA-knappen
         maValue = null;
         document.getElementById('maBtn').textContent = 'mA';
         
@@ -1069,7 +1055,6 @@ async function save(){
     }
 }
 
-// Initiera appen
 loadData();
 
 if('serviceWorker' in navigator){
