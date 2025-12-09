@@ -12,7 +12,7 @@
   --primary: #0f3460;
   --secondary: #16213e;
   --accent: #2e7d32;
-  --ms-color: #9c27b0;
+  --ma-color: #9c27b0;
   --text: #f0f0f0;
   --text-secondary: #b0b0b0;
   --card-bg: rgba(255, 255, 255, 0.08);
@@ -156,9 +156,9 @@ select:focus, input:focus {
   letter-spacing: 0.5px;
 }
 
-.ms-btn {
+.ma-btn {
   width: 25%;
-  background: var(--ms-color);
+  background: var(--ma-color);
   font-size:18px;
   padding:20px 10px;
   border-radius:var(--border-radius);
@@ -175,7 +175,7 @@ select:focus, input:focus {
   letter-spacing: 0.5px;
 }
 
-.save-btn:active, .ms-btn:active { 
+.save-btn:active, .ma-btn:active { 
   transform: translateY(2px);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
@@ -187,7 +187,7 @@ select:focus, input:focus {
   box-shadow: none;
 }
 
-.ms-btn:disabled {
+.ma-btn:disabled {
   background: rgba(156, 39, 176, 0.5);
   cursor: not-allowed;
   transform: none;
@@ -245,7 +245,7 @@ select:focus, input:focus {
   background: rgba(0, 0, 0, 0.3);
   padding: 20px;
   border-radius: 12px;
-  font-size: 28px;
+  font-size: 32px;
   text-align: center;
   margin-bottom: 20px;
   border: 2px solid rgba(255, 255, 255, 0.1);
@@ -269,12 +269,12 @@ select:focus, input:focus {
   border: none;
   border-radius: 12px;
   padding: 20px 10px;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--text);
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 70px;
+  min-height: 80px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -294,7 +294,7 @@ select:focus, input:focus {
 
 .keyboard-key.submit {
   background: var(--accent);
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .fade-in { 
@@ -473,13 +473,13 @@ select:focus, input:focus {
     min-height: 60px;
   }
   
-  .save-btn, .ms-btn {
+  .save-btn, .ma-btn {
     padding: 18px;
     font-size: 20px;
     min-height: 60px;
   }
   
-  .ms-btn {
+  .ma-btn {
     font-size: 16px;
     padding: 18px 8px;
   }
@@ -499,13 +499,13 @@ select:focus, input:focus {
   }
   
   .keyboard-key {
-    padding: 16px 8px;
-    font-size: 20px;
-    min-height: 60px;
+    padding: 18px 8px;
+    font-size: 28px;
+    min-height: 70px;
   }
   
   .keyboard-display {
-    font-size: 24px;
+    font-size: 28px;
     padding: 16px;
     min-height: 60px;
   }
@@ -646,7 +646,7 @@ select option {
 
 <!-- NY KNAPP-LAYOUT -->
 <div class="buttons-container">
-  <button class="ms-btn" id="msBtn" onclick="openNumericKeyboard()">ms</button>
+  <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard()">mA</button>
   <button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
 </div>
 
@@ -660,7 +660,7 @@ select option {
   <div class="numeric-keyboard">
     <div class="keyboard-header">
       <div class="keyboard-title">Märkström</div>
-      <div class="keyboard-subtitle">Ange mätvärde i mA</div>
+      <div class="keyboard-subtitle">Ange mätvärde i mA (milliampere)</div>
     </div>
     <div class="keyboard-display" id="keyboardDisplay">0</div>
     <div class="keyboard-row">
@@ -706,11 +706,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzRsmS3W8ARaCHQHLcRMCC8
 let allData = [];
 let LGH_KEY = "lgh";
 let currentNumber = "0";
-let msValue = null;
+let maValue = null;
 
 // NUMERISKT TANGENTBORD FUNKTIONER
 function openNumericKeyboard() {
-    currentNumber = msValue ? msValue.toString() : "0";
+    currentNumber = maValue ? maValue.toString() : "0";
     document.getElementById('keyboardDisplay').textContent = currentNumber;
     document.getElementById('numericKeyboard').classList.add('show');
 }
@@ -742,11 +742,11 @@ function clearDisplay() {
 
 function submitNumber() {
     const numberValue = parseFloat(currentNumber);
-    msValue = numberValue;
+    maValue = numberValue;
     
-    // Uppdatera MS-knappens text
-    const msBtn = document.getElementById('msBtn');
-    msBtn.textContent = `${numberValue}ms`;
+    // Uppdatera mA-knappens text
+    const maBtn = document.getElementById('maBtn');
+    maBtn.textContent = `${numberValue} mA`;
     
     closeNumericKeyboard();
 }
@@ -1015,9 +1015,9 @@ async function save(){
         time: timeStr
     };
 
-    // Lägg till MS-värdet i kolumn G
-    if (msValue !== null) {
-        body.ms = msValue;
+    // Lägg till mA-värdet i kolumn G
+    if (maValue !== null) {
+        body.mA = maValue;
     }
 
     try {
@@ -1046,7 +1046,7 @@ async function save(){
             modal.classList.remove('show');
         }, 2000);
 
-        // Återställ formuläret och MS-värdet
+        // Återställ formuläret och mA-värdet
         document.getElementById("uppdrag").selectedIndex = 0;
         document.getElementById("fastighet").selectedIndex = 0;
         document.getElementById("adress").selectedIndex = 0;
@@ -1054,9 +1054,9 @@ async function save(){
         document.getElementById("status").selectedIndex = 0;
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
         
-        // Återställ MS-knappen
-        msValue = null;
-        document.getElementById('msBtn').textContent = 'mA';
+        // Återställ mA-knappen
+        maValue = null;
+        document.getElementById('maBtn').textContent = 'mA';
         
         saveBtn.innerHTML = "SPARA TEST";
         validateForm();
