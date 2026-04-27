@@ -13,6 +13,7 @@
   --secondary: #16213e;
   --accent: #2e7d32;
   --ma-color: #9c27b0;
+  --ms-color: #ff9100;
   --text: #f0f0f0;
   --text-secondary: #b0b0b0;
   --card-bg: rgba(255, 255, 255, 0.08);
@@ -156,7 +157,7 @@ select:focus, input:focus {
 }
 
 .ma-btn {
-  width: 25%;
+  width: 22%;
   background: var(--ma-color);
   font-size:18px;
   padding:20px 10px;
@@ -174,7 +175,26 @@ select:focus, input:focus {
   letter-spacing: 0.5px;
 }
 
-.save-btn:active, .ma-btn:active { 
+.ms-btn {
+  width: 22%;
+  background: var(--ms-color);
+  font-size:18px;
+  padding:20px 10px;
+  border-radius:var(--border-radius);
+  box-shadow: 0 6px 20px rgba(255, 145, 0, 0.4);
+  border: none;
+  cursor:pointer;
+  font-weight:700;
+  color: white;
+  opacity:0;
+  animation:fadeIn 1s ease forwards;
+  animation-delay:0.2s;
+  transition: all 0.3s ease;
+  min-height:64px;
+  letter-spacing: 0.5px;
+}
+
+.save-btn:active, .ma-btn:active, .ms-btn:active { 
   transform: translateY(2px);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
@@ -188,6 +208,13 @@ select:focus, input:focus {
 
 .ma-btn:disabled {
   background: rgba(156, 39, 176, 0.5);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.ms-btn:disabled {
+  background: rgba(255, 145, 0, 0.5);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -470,13 +497,13 @@ select:focus, input:focus {
     min-height: 60px;
   }
   
-  .save-btn, .ma-btn {
+  .save-btn, .ma-btn, .ms-btn {
     padding: 18px;
     font-size: 20px;
     min-height: 60px;
   }
   
-  .ma-btn {
+  .ma-btn, .ms-btn {
     font-size: 16px;
     padding: 18px 8px;
   }
@@ -639,7 +666,8 @@ select option {
 </div>
 
 <div class="buttons-container">
-  <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard()">mA</button>
+  <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard('ma')">mA</button>
+  <button class="ms-btn" id="msBtn" onclick="openNumericKeyboard('ms')">ms</button>
   <button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
 </div>
 
@@ -651,8 +679,8 @@ select option {
 <div id="numericKeyboard" class="numeric-keyboard-overlay">
   <div class="numeric-keyboard">
     <div class="keyboard-header">
-      <div class="keyboard-title">Märkström</div>
-      <div class="keyboard-subtitle">Ange mätvärde i mA (milliampere)</div>
+      <div class="keyboard-title" id="keyboardTitle">Märkström</div>
+      <div class="keyboard-subtitle" id="keyboardSubtitle">Ange mätvärde i mA (milliampere)</div>
     </div>
     <div class="keyboard-display" id="keyboardDisplay">0</div>
     <div class="keyboard-row">
@@ -699,10 +727,18 @@ let allData = [];
 let LGH_KEY = "lgh";
 let currentNumber = "0";
 let maValue = null;
+let msValue = null;
+let activeField = 'ma';
 
-function openNumericKeyboard() {
-    currentNumber = maValue ? maValue.toString() : "0";
+function openNumericKeyboard(field) {
+    activeField = field || 'ma';
+    const current = activeField === 'ms' ? msValue : maValue;
+    currentNumber = current !== null && current !== undefined ? current.toString() : "0";
     document.getElementById('keyboardDisplay').textContent = currentNumber;
+    document.getElementById('keyboardTitle').textContent = activeField === 'ms' ? 'Frånslagstid' : 'Märkström';
+    document.getElementById('keyboardSubtitle').textContent = activeField === 'ms'
+        ? 'Ange mätvärde i ms (millisekunder)'
+        : 'Ange mätvärde i mA (milliampere)';
     document.getElementById('numericKeyboard').classList.add('show');
 }
 
@@ -733,10 +769,16 @@ function clearDisplay() {
 
 function submitNumber() {
     const numberValue = parseFloat(currentNumber);
-    maValue = numberValue;
-    const maBtn = document.getElementById('maBtn');
-    maBtn.textContent = `${numberValue} mA`;
+    if (isNaN(numberValue)) { closeNumericKeyboard(); return; }
+    if (activeField === 'ms') {
+        msValue = numberValue;
+        document.getElementById('msBtn').textContent = `${numberValue} ms`;
+    } else {
+        maValue = numberValue;
+        document.getElementById('maBtn').textContent = `${numberValue} mA`;
+    }
     closeNumericKeyboard();
+    validateForm();
 }
 
 function detectLghKey() {
@@ -968,7 +1010,7 @@ function validateForm() {
     const status = document.getElementById("status").value;
     const saveBtn = document.getElementById("saveBtn");
     
-    if(uppdrag && fastighet && adress && lgh && status) {
+    if(uppdrag && fastighet && adress && lgh && status && maValue !== null && msValue !== null) {
         saveBtn.disabled = false;
     } else {
         saveBtn.disabled = true;
@@ -1003,9 +1045,12 @@ async function save(){
         time: timeStr
     };
 
-    // Lägg till mA-värdet i kolumn G
+    // mA-värdet (kolumn G) och ms-värdet (kolumn H)
     if (maValue !== null) {
         body.mA = maValue;
+    }
+    if (msValue !== null) {
+        body.ms = msValue;
     }
 
     try {
@@ -1042,7 +1087,9 @@ async function save(){
         document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
         
         maValue = null;
+        msValue = null;
         document.getElementById('maBtn').textContent = 'mA';
+        document.getElementById('msBtn').textContent = 'ms';
         
         saveBtn.innerHTML = "SPARA TEST";
         validateForm();
