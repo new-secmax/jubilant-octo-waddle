@@ -21,14 +21,11 @@
   --border-radius: 16px;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-body { 
-  margin:0; 
-  padding:0; 
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+body {
+  margin:0; padding:0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: var(--text);
   touch-action: manipulation;
@@ -37,71 +34,50 @@ body {
   font-size: 20px;
 }
 
-.topbar { 
-  position: sticky; 
-  top:0; 
-  width:100%; 
-  text-align:center; 
-  padding: 20px 12px;
-  font-size: 26px;
-  font-weight:700; 
+.topbar {
+  position: sticky; top:0; width:100%;
+  text-align:center; padding: 20px 12px;
+  font-size: 26px; font-weight:700;
   background: rgba(15, 52, 96, 0.9);
   backdrop-filter: blur(10px);
-  z-index:1000; 
-  box-shadow: var(--shadow);
+  z-index:1000; box-shadow: var(--shadow);
   color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  letter-spacing: 0.5px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; letter-spacing: 0.5px;
 }
 
-.app { 
-  max-width:100%; 
-  margin:16px auto 10px; 
-  display:none; 
-  padding: 0 16px;
+.app {
+  max-width:100%; margin:16px auto 10px;
+  display:none; padding: 0 16px;
 }
 
-.card { 
+.card {
   background: var(--card-bg);
   padding: 20px;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   margin-bottom: 20px;
-  opacity:0; 
-  animation:fadeIn 0.7s ease forwards;
+  opacity:0; animation:fadeIn 0.7s ease forwards;
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
 }
 
-.form-group {
-  margin-bottom: 16px;
+.form-group { margin-bottom: 16px; }
+
+label {
+  display:flex; align-items:center; gap:10px;
+  font-weight:600; margin-bottom:10px;
+  color: var(--text); font-size: 22px;
 }
 
-label { 
-  display:block; 
-  font-weight:600; 
-  margin-bottom:10px;
-  color: var(--text);
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-select, input { 
-  width:100%; 
-  padding:18px;
-  border-radius:12px; 
+select, input {
+  width:100%; padding:18px;
+  border-radius:12px;
   border: 2px solid rgba(255, 255, 255, 0.15);
   background: rgba(0, 0, 0, 0.25);
   color: var(--text);
-  font-size:22px;
-  margin-bottom:8px; 
-  min-height:64px;
-  font-weight:500;
+  font-size:22px; margin-bottom:8px;
+  min-height:64px; font-weight:500;
   transition: all 0.3s ease;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f0f0f0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -117,254 +93,187 @@ select:focus, input:focus {
 }
 
 .last-checked-display {
-  padding:18px;
-  border-radius:12px;
+  padding:18px; border-radius:12px;
   background: rgba(0, 0, 0, 0.25);
-  font-size:22px;
-  color: var(--text);
+  font-size:22px; color: var(--text);
   margin-bottom:8px;
-  display:flex;
-  align-items:center;
+  display:flex; align-items:center;
   font-weight:500;
   border: 2px solid rgba(255, 255, 255, 0.1);
   min-height: 64px;
 }
 
-.buttons-container {
-  display: flex;
+/* === NYTT: mA + ms ovanför status === */
+.measure-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 8px;
-  width: 100%;
+  margin-bottom: 16px;
 }
 
-.save-btn { 
-  flex: 1;
-  background: var(--accent);
-  font-size:22px;
-  padding:20px;
-  border-radius:var(--border-radius); 
-  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+.ma-btn, .ms-btn {
+  width: 100%;
+  font-size: 20px;
+  padding: 16px 12px;
+  border-radius: var(--border-radius);
   border: none;
-  cursor:pointer; 
-  font-weight:700; 
+  cursor: pointer;
+  font-weight: 700;
   color: white;
-  opacity:0; 
-  animation:fadeIn 1s ease forwards; 
-  animation-delay:0.2s; 
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 0.2s;
   transition: all 0.3s ease;
-  min-height:64px;
+  min-height: 70px;
   letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  line-height: 1.15;
 }
 
 .ma-btn {
-  width: 22%;
   background: var(--ma-color);
-  font-size:18px;
-  padding:20px 10px;
-  border-radius:var(--border-radius);
   box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
-  border: none;
-  cursor:pointer;
-  font-weight:700;
-  color: white;
-  opacity:0;
-  animation:fadeIn 1s ease forwards;
-  animation-delay:0.2s;
-  transition: all 0.3s ease;
-  min-height:64px;
-  letter-spacing: 0.5px;
 }
-
 .ms-btn {
-  width: 22%;
   background: var(--ms-color);
-  font-size:18px;
-  padding:20px 10px;
-  border-radius:var(--border-radius);
   box-shadow: 0 6px 20px rgba(255, 145, 0, 0.4);
-  border: none;
-  cursor:pointer;
-  font-weight:700;
-  color: white;
-  opacity:0;
-  animation:fadeIn 1s ease forwards;
-  animation-delay:0.2s;
+}
+
+.measure-label {
+  font-size: 15px;
+  opacity: 0.85;
+  letter-spacing: 1px;
+}
+
+.measure-value {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.measure-value.empty {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* Spara på egen rad */
+.save-container {
+  display: flex;
+  margin-top: 8px;
+}
+
+.save-btn {
+  flex: 1;
+  background: var(--accent);
+  font-size: 22px;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+  border: none; cursor: pointer;
+  font-weight: 700; color: white;
+  opacity: 0; animation: fadeIn 1s ease forwards;
+  animation-delay: 0.2s;
   transition: all 0.3s ease;
-  min-height:64px;
+  min-height: 64px;
   letter-spacing: 0.5px;
 }
 
-.save-btn:active, .ma-btn:active, .ms-btn:active { 
+.save-btn:active, .ma-btn:active, .ms-btn:active {
   transform: translateY(2px);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
 
 .save-btn:disabled {
   background: rgba(46, 125, 50, 0.5);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  cursor: not-allowed; transform: none; box-shadow: none;
 }
-
 .ma-btn:disabled {
   background: rgba(156, 39, 176, 0.5);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  cursor: not-allowed; transform: none; box-shadow: none;
 }
-
 .ms-btn:disabled {
   background: rgba(255, 145, 0, 0.5);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  cursor: not-allowed; transform: none; box-shadow: none;
 }
 
+/* === Numerisk knappsats (oförändrad) === */
 .numeric-keyboard-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  animation: fadeIn 0.3s ease;
+  display: none; align-items: center; justify-content: center;
+  z-index: 10000; animation: fadeIn 0.3s ease;
   padding: 20px;
 }
-
-.numeric-keyboard-overlay.show {
-  display: flex;
-}
+.numeric-keyboard-overlay.show { display: flex; }
 
 .numeric-keyboard {
   background: var(--secondary);
   padding: 25px;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  width: 100%;
-  max-width: 400px;
+  width: 100%; max-width: 400px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.keyboard-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.keyboard-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-.keyboard-subtitle {
-  font-size: 16px;
-  color: var(--text-secondary);
-}
+.keyboard-header { text-align: center; margin-bottom: 20px; }
+.keyboard-title { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.keyboard-subtitle { font-size: 16px; color: var(--text-secondary); }
 
 .keyboard-display {
   background: rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  border-radius: 12px;
-  font-size: 32px;
-  text-align: center;
+  padding: 20px; border-radius: 12px;
+  font-size: 32px; text-align: center;
   margin-bottom: 20px;
   border: 2px solid rgba(255, 255, 255, 0.1);
   min-height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   font-weight: 600;
 }
 
-.keyboard-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  justify-content: center;
-}
-
+.keyboard-row { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
 .keyboard-key {
-  flex: 1;
-  background: var(--primary);
-  border: none;
-  border-radius: 12px;
-  padding: 20px 10px;
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.2s ease;
+  flex: 1; background: var(--primary); border: none;
+  border-radius: 12px; padding: 20px 10px;
+  font-size: 32px; font-weight: 700; color: var(--text);
+  cursor: pointer; transition: all 0.2s ease;
   min-height: 80px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
-
 .keyboard-key:active {
   background: var(--accent);
   transform: translateY(2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
+.keyboard-key.wide { flex: 2; }
+.keyboard-key.clear { background: #f44336; }
+.keyboard-key.submit { background: var(--accent); font-size: 24px; }
 
-.keyboard-key.wide {
-  flex: 2;
+.fade-in { opacity:0; animation:fadeIn 0.7s ease forwards; }
+@keyframes fadeIn {
+  0%{opacity:0; transform:translateY(10px);}
+  100%{opacity:1; transform:translateY(0);}
 }
 
-.keyboard-key.clear {
-  background: #f44336;
-}
-
-.keyboard-key.submit {
-  background: var(--accent);
-  font-size: 24px;
-}
-
-.fade-in { 
-  opacity:0; 
-  animation:fadeIn 0.7s ease forwards; 
-}
-
-@keyframes fadeIn { 
-  0%{opacity:0; transform:translateY(10px);} 
-  100%{opacity:1; transform:translateY(0);} 
-}
-
-.loader { 
-  width:70px;
-  height:70px;
-  margin:50px auto; 
-  border-radius:50%; 
+.loader {
+  width:70px; height:70px; margin:50px auto;
+  border-radius:50%;
   border: 5px solid rgba(15, 52, 96, 0.3);
   border-top: 5px solid var(--accent);
   animation: spin 1s linear infinite;
 }
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
-  padding: 20px;
+  display: none; align-items: center; justify-content: center;
+  z-index: 9999; animation: fadeIn 0.3s ease; padding: 20px;
 }
-
-.modal-overlay.show {
-  display: flex;
-}
+.modal-overlay.show { display: flex; }
 
 .modal-content {
   background: var(--secondary);
@@ -373,211 +282,86 @@ select:focus, input:focus {
   box-shadow: var(--shadow);
   text-align: center;
   animation: scaleIn 0.3s ease;
-  max-width: 90%;
-  width: 340px;
+  max-width: 90%; width: 340px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-@keyframes scaleIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
+@keyframes scaleIn { 0%{transform:scale(.8); opacity:0} 100%{transform:scale(1); opacity:1} }
 
 .checkmark-circle {
-  width: 100px;
-  height: 100px;
+  width: 100px; height: 100px;
   margin: 0 auto 20px;
   border-radius: 50%;
   background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   box-shadow: 0 6px 20px rgba(46, 125, 50, 0.5);
 }
-
 .checkmark {
-  width: 50px;
-  height: 50px;
-  stroke: white;
-  stroke-width: 4;
-  fill: none;
+  width: 50px; height: 50px;
+  stroke: white; stroke-width: 4; fill: none;
   animation: checkmarkDraw 0.5s ease forwards;
 }
-
 @keyframes checkmarkDraw {
-  0% {
-    stroke-dasharray: 0, 100;
-    opacity: 0;
-  }
-  100% {
-    stroke-dasharray: 100, 100;
-    opacity: 1;
-  }
+  0%{stroke-dasharray:0,100; opacity:0}
+  100%{stroke-dasharray:100,100; opacity:1}
 }
 
-.saved-text {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--text);
-  margin-bottom: 10px;
-}
+.saved-text { font-size: 28px; font-weight: bold; color: var(--text); margin-bottom: 10px; }
+.saved-subtext { font-size: 18px; color: var(--text-secondary); }
 
-.saved-subtext {
-  font-size: 18px;
-  color: var(--text-secondary);
-}
-
-.icon {
-  width: 26px;
-  height: 26px;
-  stroke: var(--accent);
-  stroke-width: 2.2;
-  fill: none;
-}
-
-.status-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 18px;
-  font-weight: 600;
-  margin-left: 12px;
-}
-
-.status-ok {
-  background: rgba(46, 125, 50, 0.3);
-  color: #4CAF50;
-}
-
-.status-not-available {
-  background: rgba(255, 152, 0, 0.3);
-  color: #FF9800;
-}
-
-.status-fault {
-  background: rgba(244, 67, 54, 0.3);
-  color: #F44336;
-}
+.icon { width: 26px; height: 26px; stroke: var(--accent); stroke-width: 2.2; fill: none; }
 
 .footer {
-  text-align: center;
-  padding: 20px;
+  text-align: center; padding: 20px;
   color: var(--text-secondary);
-  font-size: 16px;
-  margin-top: 16px;
+  font-size: 16px; margin-top: 16px;
 }
 
+/* === Mobil === */
 @media (max-width: 480px) {
-  body {
-    font-size: 18px;
-  }
-  
-  .topbar {
-    font-size: 24px;
-    padding: 18px 12px;
-  }
-  
-  .card {
-    padding: 18px;
-  }
-  
-  .form-group {
-    margin-bottom: 14px;
-  }
-  
-  label {
-    font-size: 20px;
-  }
-  
-  select, input {
-    padding: 16px;
-    font-size: 20px;
-    min-height: 60px;
-  }
-  
-  .save-btn, .ma-btn, .ms-btn {
-    padding: 18px;
-    font-size: 20px;
-    min-height: 60px;
-  }
-  
+  body { font-size: 18px; }
+  .topbar { font-size: 22px; padding: 16px 12px; }
+  .card { padding: 16px; margin-bottom: 16px; }
+  .form-group { margin-bottom: 12px; }
+  label { font-size: 18px; margin-bottom: 8px; }
+  select, input { padding: 14px; font-size: 18px; min-height: 56px; }
+  .last-checked-display { font-size: 18px; padding: 14px; min-height: 56px; }
+
+  .measure-container { gap: 10px; margin-bottom: 14px; }
   .ma-btn, .ms-btn {
     font-size: 16px;
-    padding: 18px 8px;
+    padding: 14px 8px;
+    min-height: 64px;
   }
-  
-  .last-checked-display {
-    font-size: 20px;
-    padding: 16px;
-    min-height: 60px;
-  }
-  
-  .saved-text {
-    font-size: 26px;
-  }
-  
-  .numeric-keyboard {
-    padding: 20px;
-  }
-  
-  .keyboard-key {
-    padding: 18px 8px;
-    font-size: 28px;
-    min-height: 70px;
-  }
-  
-  .keyboard-display {
-    font-size: 28px;
-    padding: 16px;
-    min-height: 60px;
-  }
-  
-  .keyboard-title {
-    font-size: 22px;
-  }
+  .measure-label { font-size: 13px; }
+  .measure-value { font-size: 18px; }
+  .measure-value.empty { font-size: 14px; }
+
+  .save-btn { padding: 18px; font-size: 20px; min-height: 60px; }
+  .saved-text { font-size: 24px; }
+
+  .numeric-keyboard { padding: 18px; }
+  .keyboard-key { padding: 16px 8px; font-size: 26px; min-height: 64px; }
+  .keyboard-display { font-size: 26px; padding: 14px; min-height: 56px; }
+  .keyboard-title { font-size: 20px; }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(46, 125, 50, 0.8);
-}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(46, 125, 50, 0.8); }
 
 select:focus, input:focus, button:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: 2px solid var(--accent); outline-offset: 2px;
 }
 
 select option {
   background: var(--secondary);
   color: var(--text);
-  font-size: 20px;
-  padding: 12px;
-  height: 50px;
-}
-
-select {
-  font-size: 22px !important;
-}
-
-select option {
   font-size: 20px !important;
   padding: 15px 10px !important;
   line-height: 1.5 !important;
 }
+select { font-size: 22px !important; }
 </style>
 </head>
 
@@ -592,82 +376,95 @@ select option {
 
 <div class="app" id="app">
 <div class="card">
-<div class="form-group">
-<label>
-  <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-  </svg>
-  Uppdrag
-</label>
-<select id="uppdrag"></select>
-</div>
 
-<div class="form-group">
-<label>
-  <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-    <polyline points="9 22 9 12 15 12 15 22"/>
-  </svg>
-  Fastighet
-</label>
-<select id="fastighet"></select>
-</div>
+  <div class="form-group">
+    <label>
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+      </svg>
+      Uppdrag
+    </label>
+    <select id="uppdrag"></select>
+  </div>
 
-<div class="form-group">
-<label>
-  <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-    <circle cx="12" cy="10" r="3"/>
-  </svg>
-  Adress
-</label>
-<select id="adress"></select>
-</div>
+  <div class="form-group">
+    <label>
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      Fastighet
+    </label>
+    <select id="fastighet"></select>
+  </div>
 
-<div class="form-group">
-<label>
-  <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-  </svg>
-  Lägenhetsnummer
-</label>
-<select id="lgh"></select>
-</div>
+  <div class="form-group">
+    <label>
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      Adress
+    </label>
+    <select id="adress"></select>
+  </div>
 
-<div class="form-group">
-<label>
-  <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-    <line x1="16" y1="2" x2="16" y2="6"/>
-    <line x1="8" y1="2" x2="8" y2="6"/>
-    <line x1="3" y1="10" x2="21" y2="10"/>
-  </svg>
-  Senast kontrollerad:
-</label>
-<div id="latest" class="last-checked-display"></div>
-</div>
+  <div class="form-group">
+    <label>
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Lägenhetsnummer
+    </label>
+    <select id="lgh"></select>
+  </div>
 
-<div class="form-group">
-<label>
-  <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-    <polyline points="20 6 9 17 4 12"/>
-  </svg>
-  Status
-</label>
-<select id="status">
-<option value="">Välj status…</option>
-<option value="Funktion. OK">Funktion. OK</option>
-<option value="Ej tillgänglig">Ej tillgänglig</option>
-<option value="Funktionsfel">Funktionsfel</option>
-</select>
-</div>
-</div>
+  <div class="form-group">
+    <label>
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Senast kontrollerad:
+    </label>
+    <div id="latest" class="last-checked-display"></div>
+  </div>
 
-<div class="buttons-container">
-  <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard('ma')">mA</button>
-  <button class="ms-btn" id="msBtn" onclick="openNumericKeyboard('ms')">ms</button>
+  <!-- ⬇️ NYTT: mA + ms OVANFÖR status -->
+  <div class="measure-container">
+    <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard('ma')">
+      <span class="measure-label">MÄRKSTRÖM</span>
+      <span class="measure-value empty" id="maValueLabel">mA</span>
+    </button>
+    <button class="ms-btn" id="msBtn" onclick="openNumericKeyboard('ms')">
+      <span class="measure-label">FRÅNSLAGSTID</span>
+      <span class="measure-value empty" id="msValueLabel">ms</span>
+    </button>
+  </div>
+
+  <div class="form-group">
+    <label>
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Status
+    </label>
+    <select id="status">
+      <option value="">Välj status…</option>
+      <option value="Funktion. OK">Funktion. OK</option>
+      <option value="Ej tillgänglig">Ej tillgänglig</option>
+      <option value="Funktionsfel">Funktionsfel</option>
+    </select>
+  </div>
+
+</div>
+<!-- /card -->
+
+<div class="save-container">
   <button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
 </div>
 
@@ -675,6 +472,7 @@ select option {
   Jordfelsbrytarkontrollen &copy; Max 2025
 </div>
 </div>
+<!-- /app -->
 
 <div id="numericKeyboard" class="numeric-keyboard-overlay">
   <div class="numeric-keyboard">
@@ -710,15 +508,15 @@ select option {
 </div>
 
 <div id="savedModal" class="modal-overlay">
-<div class="modal-content">
-<div class="checkmark-circle">
-<svg class="checkmark" viewBox="0 0 52 52">
-<polyline points="14,27 22,35 38,19" />
-</svg>
-</div>
-<p class="saved-text">Testresultat Sparat!</p>
-<p class="saved-subtext">Informationen har uppdaterats</p>
-</div>
+  <div class="modal-content">
+    <div class="checkmark-circle">
+      <svg class="checkmark" viewBox="0 0 52 52">
+        <polyline points="14,27 22,35 38,19" />
+      </svg>
+    </div>
+    <p class="saved-text">Testresultat Sparat!</p>
+    <p class="saved-subtext">Informationen har uppdaterats</p>
+  </div>
 </div>
 
 <script>
@@ -730,382 +528,297 @@ let maValue = null;
 let msValue = null;
 let activeField = 'ma';
 
+function setMaLabel() {
+  const el = document.getElementById('maValueLabel');
+  if (maValue !== null) {
+    el.textContent = maValue + ' mA';
+    el.classList.remove('empty');
+  } else {
+    el.textContent = 'mA';
+    el.classList.add('empty');
+  }
+}
+function setMsLabel() {
+  const el = document.getElementById('msValueLabel');
+  if (msValue !== null) {
+    el.textContent = msValue + ' ms';
+    el.classList.remove('empty');
+  } else {
+    el.textContent = 'ms';
+    el.classList.add('empty');
+  }
+}
+
 function openNumericKeyboard(field) {
-    activeField = field || 'ma';
-    const current = activeField === 'ms' ? msValue : maValue;
-    currentNumber = current !== null && current !== undefined ? current.toString() : "0";
-    document.getElementById('keyboardDisplay').textContent = currentNumber;
-    document.getElementById('keyboardTitle').textContent = activeField === 'ms' ? 'Frånslagstid' : 'Märkström';
-    document.getElementById('keyboardSubtitle').textContent = activeField === 'ms'
-        ? 'Ange mätvärde i ms (millisekunder)'
-        : 'Ange mätvärde i mA (milliampere)';
-    document.getElementById('numericKeyboard').classList.add('show');
+  activeField = field || 'ma';
+  const current = activeField === 'ms' ? msValue : maValue;
+  currentNumber = current !== null && current !== undefined ? current.toString() : "0";
+  document.getElementById('keyboardDisplay').textContent = currentNumber;
+  document.getElementById('keyboardTitle').textContent = activeField === 'ms' ? 'Frånslagstid' : 'Märkström';
+  document.getElementById('keyboardSubtitle').textContent = activeField === 'ms'
+      ? 'Ange mätvärde i ms (millisekunder)'
+      : 'Ange mätvärde i mA (milliampere)';
+  document.getElementById('numericKeyboard').classList.add('show');
 }
 
 function closeNumericKeyboard() {
-    document.getElementById('numericKeyboard').classList.remove('show');
+  document.getElementById('numericKeyboard').classList.remove('show');
 }
 
 function addNumber(number) {
-    if (currentNumber === "0") {
-        currentNumber = number.toString();
-    } else {
-        currentNumber += number.toString();
-    }
-    document.getElementById('keyboardDisplay').textContent = currentNumber;
+  if (currentNumber === "0") currentNumber = number.toString();
+  else currentNumber += number.toString();
+  document.getElementById('keyboardDisplay').textContent = currentNumber;
 }
 
 function addDecimal() {
-    if (!currentNumber.includes('.')) {
-        currentNumber += '.';
-        document.getElementById('keyboardDisplay').textContent = currentNumber;
-    }
+  if (!currentNumber.includes('.')) {
+    currentNumber += '.';
+    document.getElementById('keyboardDisplay').textContent = currentNumber;
+  }
 }
 
 function clearDisplay() {
-    currentNumber = "0";
-    document.getElementById('keyboardDisplay').textContent = currentNumber;
+  currentNumber = "0";
+  document.getElementById('keyboardDisplay').textContent = currentNumber;
 }
 
 function submitNumber() {
-    const numberValue = parseFloat(currentNumber);
-    if (isNaN(numberValue)) { closeNumericKeyboard(); return; }
-    if (activeField === 'ms') {
-        msValue = numberValue;
-        document.getElementById('msBtn').textContent = `${numberValue} ms`;
-    } else {
-        maValue = numberValue;
-        document.getElementById('maBtn').textContent = `${numberValue} mA`;
-    }
-    closeNumericKeyboard();
-    validateForm();
+  const numberValue = parseFloat(currentNumber);
+  if (isNaN(numberValue)) { closeNumericKeyboard(); return; }
+  if (activeField === 'ms') {
+    msValue = numberValue;
+    setMsLabel();
+  } else {
+    maValue = numberValue;
+    setMaLabel();
+  }
+  closeNumericKeyboard();
+  validateForm();
 }
 
 function detectLghKey() {
-    if (!allData.length) return;
-    const sample = allData[0] || {};
-    const knownKeys = ["uppdrag","fastighet","adress","status","date","time","previousDate","previousStatus"];
-    const keys = Object.keys(sample);
-
-    if (keys.includes("lgh")) {
-        LGH_KEY = "lgh";
-        return;
-    }
-
-    const candidates = keys.filter(k => !knownKeys.includes(k) && /l.*gh|lägenhet|lagenhet/i.test(k));
-    if (candidates.length) {
-        LGH_KEY = candidates[0];
-        return;
-    }
-
-    const fallback = keys.find(k => !knownKeys.includes(k));
-    if (fallback) {
-        LGH_KEY = fallback;
-    }
-
-    console.log("🔑 Upptäckt fält för lägenhetsnummer:", LGH_KEY);
+  if (!allData.length) return;
+  const sample = allData[0] || {};
+  const knownKeys = ["uppdrag","fastighet","adress","status","date","time","previousDate","previousStatus"];
+  const keys = Object.keys(sample);
+  if (keys.includes("lgh")) { LGH_KEY = "lgh"; return; }
+  const candidates = keys.filter(k => !knownKeys.includes(k) && /l.*gh|lägenhet|lagenhet/i.test(k));
+  if (candidates.length) { LGH_KEY = candidates[0]; return; }
+  const fallback = keys.find(k => !knownKeys.includes(k));
+  if (fallback) LGH_KEY = fallback;
+  console.log("🔑 Upptäckt fält för lägenhetsnummer:", LGH_KEY);
 }
 
 function getLgh(item) {
-    return item[LGH_KEY] || item.lgh || item["Lägenhetsnummer"] || item["lägenhetsnummer"];
+  return item[LGH_KEY] || item.lgh || item["Lägenhetsnummer"] || item["lägenhetsnummer"];
 }
 
 function normalizeAdress(value) {
-    if (value === "(Ingen adress)" || value == null) return "";
-    return String(value).trim();
+  if (value === "(Ingen adress)" || value == null) return "";
+  return String(value).trim();
 }
 
 async function loadData(){
-    document.getElementById("loader").style.display="block";
-    document.getElementById("app").style.display="none";
+  document.getElementById("loader").style.display="block";
+  document.getElementById("app").style.display="none";
 
-    try {
-        const res = await fetch(API_URL);
-        const json = await res.json();
-        allData = json.data || [];
-        detectLghKey();
-        
-        console.log("📦 FULL JSON RESPONSE:", JSON.stringify(json, null, 2));
-        console.log("📊 Total antal poster:", allData.length);
-        
-        if (allData.length > 0) {
-            console.log("🔍 FÖRSTA POSTEN (alla fält):", JSON.stringify(allData[0], null, 2));
-            console.log("🔍 Alla fältnamn i första posten:", Object.keys(allData[0]));
-        }
-        
-        const jarfallaData = allData.filter(item => 
-            item.fastighet && item.fastighet.includes("Järfälla")
-        );
-        if (jarfallaData.length > 0) {
-            console.log("🚨 JÄRFÄLLA DEBUG - Antal poster:", jarfallaData.length);
-            console.log("🚨 JÄRFÄLLA första 3 posterna:", JSON.stringify(jarfallaData.slice(0, 3), null, 2));
-        }
-        
-        fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
-        
-        document.getElementById("uppdrag").addEventListener("change", filterFastighet);
-        document.getElementById("fastighet").addEventListener("change", filterAdress);
-        document.getElementById("adress").addEventListener("change", filterLgh);
-        document.getElementById("lgh").addEventListener("change", updateLastChecked);
-        
-        document.getElementById("uppdrag").addEventListener("change", validateForm);
-        document.getElementById("fastighet").addEventListener("change", validateForm);
-        document.getElementById("adress").addEventListener("change", validateForm);
-        document.getElementById("lgh").addEventListener("change", validateForm);
-        document.getElementById("status").addEventListener("change", validateForm);
-        
-        console.log("✅ Data loaded, event listeners attached");
-    } catch (error) {
-        console.error("❌ Error loading data:", error);
-    }
+  try {
+    const res = await fetch(API_URL);
+    const json = await res.json();
+    allData = json.data || [];
+    detectLghKey();
 
-    document.getElementById("loader").style.display="none";
-    document.getElementById("app").style.display="block";
+    fillSelect("uppdrag",[...new Set(allData.map(i=>i.uppdrag).filter(Boolean))]);
+
+    document.getElementById("uppdrag").addEventListener("change", filterFastighet);
+    document.getElementById("fastighet").addEventListener("change", filterAdress);
+    document.getElementById("adress").addEventListener("change", filterLgh);
+    document.getElementById("lgh").addEventListener("change", updateLastChecked);
+
+    document.getElementById("uppdrag").addEventListener("change", validateForm);
+    document.getElementById("fastighet").addEventListener("change", validateForm);
+    document.getElementById("adress").addEventListener("change", validateForm);
+    document.getElementById("lgh").addEventListener("change", validateForm);
+    document.getElementById("status").addEventListener("change", validateForm);
+  } catch (error) {
+    console.error("❌ Error loading data:", error);
+  }
+
+  document.getElementById("loader").style.display="none";
+  document.getElementById("app").style.display="block";
 }
 
 function filterFastighet(){
-    const uppdrag = document.getElementById("uppdrag").value;
-    
-    if (!uppdrag) {
-        fillSelect("fastighet", []);
-        fillSelect("adress", []);
-        fillSelect("lgh", []);
-        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-        validateForm();
-        return;
-    }
-    
-    const filtered = allData.filter(item => item.uppdrag === uppdrag);
-    const fastigheter = [...new Set(filtered.map(i=>i.fastighet).filter(Boolean))];
-    fillSelect("fastighet", fastigheter);
-    
-    fillSelect("adress", []);
-    fillSelect("lgh", []);
+  const uppdrag = document.getElementById("uppdrag").value;
+  if (!uppdrag) {
+    fillSelect("fastighet", []); fillSelect("adress", []); fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-    validateForm();
+    validateForm(); return;
+  }
+  const filtered = allData.filter(item => item.uppdrag === uppdrag);
+  const fastigheter = [...new Set(filtered.map(i=>i.fastighet).filter(Boolean))];
+  fillSelect("fastighet", fastigheter);
+  fillSelect("adress", []); fillSelect("lgh", []);
+  document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+  validateForm();
 }
 
 function filterAdress(){
-    const uppdrag = document.getElementById("uppdrag").value;
-    const fastighet = document.getElementById("fastighet").value;
-    
-    if (!uppdrag || !fastighet) {
-        fillSelect("adress", []);
-        fillSelect("lgh", []);
-        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-        validateForm();
-        return;
-    }
-    
-    const filtered = allData.filter(item => 
-        item.uppdrag === uppdrag && 
-        item.fastighet === fastighet
-    );
-    const adresser = [...new Set(
-        filtered.map(i => normalizeAdress(i.adress) || "(Ingen adress)")
-    )];
-    fillSelect("adress", adresser);
-
-    fillSelect("lgh", []);
+  const uppdrag = document.getElementById("uppdrag").value;
+  const fastighet = document.getElementById("fastighet").value;
+  if (!uppdrag || !fastighet) {
+    fillSelect("adress", []); fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-    validateForm();
+    validateForm(); return;
+  }
+  const filtered = allData.filter(item => item.uppdrag === uppdrag && item.fastighet === fastighet);
+  const adresser = [...new Set(filtered.map(i => normalizeAdress(i.adress) || "(Ingen adress)"))];
+  fillSelect("adress", adresser);
+  fillSelect("lgh", []);
+  document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+  validateForm();
 }
 
 function filterLgh(){
-    const uppdrag = document.getElementById("uppdrag").value;
-    const fastighet = document.getElementById("fastighet").value;
-    const adress = document.getElementById("adress").value;
-    
-    if (!uppdrag || !fastighet || !adress) {
-        fillSelect("lgh", []);
-        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-        validateForm();
-        return;
-    }
-    
-    const actualAdress = normalizeAdress(adress);
-    
-    let filtered = allData.filter(item => 
-        item.uppdrag === uppdrag && 
-        item.fastighet === fastighet && 
-        normalizeAdress(item.adress) === actualAdress
-    );
-
-    if (!filtered.length) {
-        filtered = allData.filter(item => 
-            item.uppdrag === uppdrag &&
-            item.fastighet === fastighet
-        );
-        console.log("🔁 Fallback: visar lägenheter endast baserat på uppdrag + fastighet", { uppdrag, fastighet, adress });
-    }
-
-    const lgh = [...new Set(filtered.map(i=>getLgh(i)).filter(Boolean))];
-    fillSelect("lgh", lgh);
-
+  const uppdrag = document.getElementById("uppdrag").value;
+  const fastighet = document.getElementById("fastighet").value;
+  const adress = document.getElementById("adress").value;
+  if (!uppdrag || !fastighet || !adress) {
+    fillSelect("lgh", []);
     document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-    validateForm();
+    validateForm(); return;
+  }
+  const actualAdress = normalizeAdress(adress);
+  let filtered = allData.filter(item =>
+    item.uppdrag === uppdrag && item.fastighet === fastighet &&
+    normalizeAdress(item.adress) === actualAdress
+  );
+  if (!filtered.length) {
+    filtered = allData.filter(item => item.uppdrag === uppdrag && item.fastighet === fastighet);
+  }
+  const lgh = [...new Set(filtered.map(i=>getLgh(i)).filter(Boolean))];
+  fillSelect("lgh", lgh);
+  document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj alla fält</span>';
+  validateForm();
 }
 
 function updateLastChecked(){
-    const uppdrag = document.getElementById("uppdrag").value;
-    const fastighet = document.getElementById("fastighet").value;
-    const selectedAdress = document.getElementById("adress").value;
-    const selectedLgh = document.getElementById("lgh").value;
-    const latestDiv = document.getElementById("latest");
-    
-    if (!uppdrag || !fastighet || !selectedAdress || !selectedLgh) {
-        latestDiv.innerHTML = '<span style="color:#999;">Välj alla fält</span>';
-        return;
-    }
-    
-    const actualAdress = normalizeAdress(selectedAdress);
-    
-    let record = allData.find(item => 
-        item.uppdrag === uppdrag &&
-        item.fastighet === fastighet &&
-        normalizeAdress(item.adress) === actualAdress && 
-        String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
+  const uppdrag = document.getElementById("uppdrag").value;
+  const fastighet = document.getElementById("fastighet").value;
+  const selectedAdress = document.getElementById("adress").value;
+  const selectedLgh = document.getElementById("lgh").value;
+  const latestDiv = document.getElementById("latest");
+  if (!uppdrag || !fastighet || !selectedAdress || !selectedLgh) {
+    latestDiv.innerHTML = '<span style="color:#999;">Välj alla fält</span>'; return;
+  }
+  const actualAdress = normalizeAdress(selectedAdress);
+  let record = allData.find(item =>
+    item.uppdrag === uppdrag && item.fastighet === fastighet &&
+    normalizeAdress(item.adress) === actualAdress &&
+    String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
+  );
+  if (!record) {
+    record = allData.find(item =>
+      item.uppdrag === uppdrag && item.fastighet === fastighet &&
+      String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
     );
-
-    if (!record) {
-        record = allData.find(item => 
-            item.uppdrag === uppdrag &&
-            item.fastighet === fastighet &&
-            String(getLgh(item) || "").trim() === String(selectedLgh || "").trim()
-        );
-        if (record) {
-            console.log("🔁 Fallback i updateLastChecked utan adressmatchning", { uppdrag, fastighet, selectedAdress, selectedLgh });
-        }
-    }
-
-    if (!record) {
-        latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>';
-        return;
-    }
-    
-    if (record.previousDate) {
-        const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
-        latestDiv.innerHTML = `<strong>${record.previousDate}</strong>${statusText}`;
-    } else {
-        latestDiv.innerHTML = '<span style="color:#999;">Inget tidigare test registrerat</span>';
-    }
+  }
+  if (!record) { latestDiv.innerHTML = '<span style="color:#999;">Inget datum hittades</span>'; return; }
+  if (record.previousDate) {
+    const statusText = record.previousStatus ? ` - ${record.previousStatus}` : '';
+    latestDiv.innerHTML = `<strong>${record.previousDate}</strong>${statusText}`;
+  } else {
+    latestDiv.innerHTML = '<span style="color:#999;">Inget tidigare test registrerat</span>';
+  }
 }
 
 function fillSelect(id, arr){
-    const s = document.getElementById(id);
-    s.innerHTML = '<option value="">Välj...</option>';
-    arr.forEach(v => {
-        const opt = document.createElement("option");
-        opt.value = v;
-        opt.textContent = v;
-        s.appendChild(opt);
-    });
+  const s = document.getElementById(id);
+  s.innerHTML = '<option value="">Välj...</option>';
+  arr.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v; opt.textContent = v;
+    s.appendChild(opt);
+  });
 }
 
 function validateForm() {
-    const uppdrag = document.getElementById("uppdrag").value;
-    const fastighet = document.getElementById("fastighet").value;
-    const adress = document.getElementById("adress").value;
-    const lgh = document.getElementById("lgh").value;
-    const status = document.getElementById("status").value;
-    const saveBtn = document.getElementById("saveBtn");
-    
-    if(uppdrag && fastighet && adress && lgh && status && maValue !== null && msValue !== null) {
-        saveBtn.disabled = false;
-    } else {
-        saveBtn.disabled = true;
-    }
+  const uppdrag = document.getElementById("uppdrag").value;
+  const fastighet = document.getElementById("fastighet").value;
+  const adress = document.getElementById("adress").value;
+  const lgh = document.getElementById("lgh").value;
+  const status = document.getElementById("status").value;
+  const saveBtn = document.getElementById("saveBtn");
+  saveBtn.disabled = !(uppdrag && fastighet && adress && lgh && status && maValue !== null && msValue !== null);
 }
 
 async function save(){
-    const uppdrag = document.getElementById("uppdrag").value;
-    const fastighet = document.getElementById("fastighet").value;
-    const adress = document.getElementById("adress").value;
-    const lgh = document.getElementById("lgh").value;
-    const status = document.getElementById("status").value;
+  const uppdrag = document.getElementById("uppdrag").value;
+  const fastighet = document.getElementById("fastighet").value;
+  const adress = document.getElementById("adress").value;
+  const lgh = document.getElementById("lgh").value;
+  const status = document.getElementById("status").value;
 
-    if(!uppdrag || !fastighet || !adress || !lgh || !status){
-        alert("Fyll i alla fält!");
-        return;
-    }
+  if(!uppdrag || !fastighet || !adress || !lgh || !status){
+    alert("Fyll i alla fält!"); return;
+  }
 
-    const now = new Date();
-    const dateStr = now.toISOString().split('T')[0];
-    const timeStr = now.toTimeString().split(' ')[0];
+  const now = new Date();
+  const dateStr = now.toISOString().split('T')[0];
+  const timeStr = now.toTimeString().split(' ')[0];
+  const adressToSend = normalizeAdress(adress);
 
-    const adressToSend = normalizeAdress(adress);
+  const body = { uppdrag, fastighet, adress: adressToSend, lgh, status, date: dateStr, time: timeStr };
+  if (maValue !== null) body.mA = maValue;
+  if (msValue !== null) body.ms = msValue;
 
-    const body = {
-        uppdrag,
-        fastighet,
-        adress: adressToSend,
-        lgh,
-        status,
-        date: dateStr,
-        time: timeStr
-    };
+  try {
+    const saveBtn = document.getElementById("saveBtn");
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = "SPARAR...";
 
-    // mA-värdet (kolumn G) och ms-värdet (kolumn H)
-    if (maValue !== null) {
-        body.mA = maValue;
-    }
-    if (msValue !== null) {
-        body.ms = msValue;
-    }
+    const response = await fetch(API_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body: new URLSearchParams(body)
+    });
+    await response.json();
 
-    try {
-        const saveBtn = document.getElementById("saveBtn");
-        saveBtn.disabled = true;
-        saveBtn.innerHTML = "SPARAR...";
-        
-        console.log("📤 Skickar data till Google Sheets:", body);
-        
-        const response = await fetch(API_URL, {
-            method:"POST",
-            headers:{"Content-Type":"application/x-www-form-urlencoded"},
-            body: new URLSearchParams(body)
-        });
+    await loadData();
+    updateLastChecked();
 
-        const result = await response.json();
-        console.log("✅ Svar från Google Sheets:", result);
-        
-        await loadData();
-        updateLastChecked();
-        
-        const modal = document.getElementById("savedModal");
-        modal.classList.add('show');
-        
-        setTimeout(() => {
-            modal.classList.remove('show');
-        }, 2000);
+    const modal = document.getElementById("savedModal");
+    modal.classList.add('show');
+    setTimeout(() => modal.classList.remove('show'), 2000);
 
-        document.getElementById("uppdrag").selectedIndex = 0;
-        document.getElementById("fastighet").selectedIndex = 0;
-        document.getElementById("adress").selectedIndex = 0;
-        document.getElementById("lgh").selectedIndex = 0;
-        document.getElementById("status").selectedIndex = 0;
-        document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
-        
-        maValue = null;
-        msValue = null;
-        document.getElementById('maBtn').textContent = 'mA';
-        document.getElementById('msBtn').textContent = 'ms';
-        
-        saveBtn.innerHTML = "SPARA TEST";
-        validateForm();
-    } catch(err) {
-        console.error("❌ Fel vid sparande:", err);
-        alert("Kunde inte spara. Försök igen.");
-        const saveBtn = document.getElementById("saveBtn");
-        saveBtn.innerHTML = "SPARA TEST";
-        validateForm();
-    }
+    document.getElementById("uppdrag").selectedIndex = 0;
+    document.getElementById("fastighet").selectedIndex = 0;
+    document.getElementById("adress").selectedIndex = 0;
+    document.getElementById("lgh").selectedIndex = 0;
+    document.getElementById("status").selectedIndex = 0;
+    document.getElementById("latest").innerHTML = '<span style="color:#999;">Välj adress och lägenhet</span>';
+
+    maValue = null;
+    msValue = null;
+    setMaLabel();
+    setMsLabel();
+
+    saveBtn.innerHTML = "SPARA TEST";
+    validateForm();
+  } catch(err) {
+    console.error("❌ Fel vid sparande:", err);
+    alert("Kunde inte spara. Försök igen.");
+    const saveBtn = document.getElementById("saveBtn");
+    saveBtn.innerHTML = "SPARA TEST";
+    validateForm();
+  }
 }
 
 loadData();
 
 if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>
