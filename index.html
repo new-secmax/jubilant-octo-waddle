@@ -594,7 +594,21 @@ function submitNumber() {
     setMaLabel();
   }
   closeNumericKeyboard();
+  autoSetStatus();
   validateForm();
+}
+
+// Sätt status automatiskt baserat på mA/ms.
+// Om användaren manuellt valt "Ej tillgänglig" lämnas den ifred.
+function autoSetStatus() {
+  const statusEl = document.getElementById('status');
+  if (statusEl.value === 'Ej tillgänglig') return;
+  if (maValue === null || msValue === null) return;
+  if (maValue > 30 && msValue > 30) {
+    statusEl.value = 'Funktionsfel';
+  } else {
+    statusEl.value = 'Funktion. OK';
+  }
 }
 
 function detectLghKey() {
@@ -750,7 +764,10 @@ function validateForm() {
   const lgh = document.getElementById("lgh").value;
   const status = document.getElementById("status").value;
   const saveBtn = document.getElementById("saveBtn");
-  saveBtn.disabled = !(uppdrag && fastighet && adress && lgh && status && maValue !== null && msValue !== null);
+  const baseOk = uppdrag && fastighet && adress && lgh && status;
+  // Om "Ej tillgänglig" valts behövs inga mätvärden
+  const measuresOk = status === 'Ej tillgänglig' ? true : (maValue !== null && msValue !== null);
+  saveBtn.disabled = !(baseOk && measuresOk);
 }
 
 async function save(){
@@ -770,8 +787,10 @@ async function save(){
   const adressToSend = normalizeAdress(adress);
 
   const body = { uppdrag, fastighet, adress: adressToSend, lgh, status, date: dateStr, time: timeStr };
-  if (maValue !== null) body.mA = maValue;
-  if (msValue !== null) body.ms = msValue;
+  if (status !== 'Ej tillgänglig') {
+    if (maValue !== null) body.mA = maValue;
+    if (msValue !== null) body.ms = msValue;
+  }
 
   try {
     const saveBtn = document.getElementById("saveBtn");
