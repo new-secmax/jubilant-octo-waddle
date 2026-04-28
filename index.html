@@ -103,7 +103,6 @@ select:focus, input:focus {
   min-height: 64px;
 }
 
-/* === NYTT: mA + ms ovanför status === */
 .measure-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -160,7 +159,6 @@ select:focus, input:focus {
   opacity: 0.8;
 }
 
-/* Spara på egen rad */
 .save-container {
   display: flex;
   margin-top: 8px;
@@ -200,7 +198,6 @@ select:focus, input:focus {
   cursor: not-allowed; transform: none; box-shadow: none;
 }
 
-/* === Numerisk knappsats (oförändrad) === */
 .numeric-keyboard-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.8);
@@ -316,7 +313,6 @@ select:focus, input:focus {
   font-size: 16px; margin-top: 16px;
 }
 
-/* === Mobil === */
 @media (max-width: 480px) {
   body { font-size: 18px; }
   .topbar { font-size: 22px; padding: 16px 12px; }
@@ -434,7 +430,6 @@ select { font-size: 22px !important; }
     <div id="latest" class="last-checked-display"></div>
   </div>
 
-  <!-- ⬇️ NYTT: mA + ms OVANFÖR status -->
   <div class="measure-container">
     <button class="ma-btn" id="maBtn" onclick="openNumericKeyboard('ma')">
       <span class="measure-label">MÄRKSTRÖM</span>
@@ -462,7 +457,6 @@ select { font-size: 22px !important; }
   </div>
 
 </div>
-<!-- /card -->
 
 <div class="save-container">
   <button class="save-btn" id="saveBtn" onclick="save()">SPARA TEST</button>
@@ -472,7 +466,6 @@ select { font-size: 22px !important; }
   Jordfelsbrytarkontrollen &copy; Max 2025
 </div>
 </div>
-<!-- /app -->
 
 <div id="numericKeyboard" class="numeric-keyboard-overlay">
   <div class="numeric-keyboard">
@@ -598,8 +591,6 @@ function submitNumber() {
   validateForm();
 }
 
-// Sätt status automatiskt baserat på mA/ms.
-// Om användaren manuellt valt "Ej tillgänglig" lämnas den ifred.
 function autoSetStatus() {
   const statusEl = document.getElementById('status');
   if (statusEl.value === 'Ej tillgänglig') return;
@@ -655,6 +646,14 @@ async function loadData(){
     document.getElementById("adress").addEventListener("change", validateForm);
     document.getElementById("lgh").addEventListener("change", validateForm);
     document.getElementById("status").addEventListener("change", validateForm);
+
+    const uppdragEl = document.getElementById("uppdrag");
+    const hasStorebrand = Array.from(uppdragEl.options).some(o => o.value === "Storebrand");
+    if (hasStorebrand) {
+      uppdragEl.value = "Storebrand";
+      filterFastighet();
+      validateForm();
+    }
   } catch (error) {
     console.error("❌ Error loading data:", error);
   }
@@ -765,7 +764,6 @@ function validateForm() {
   const status = document.getElementById("status").value;
   const saveBtn = document.getElementById("saveBtn");
   const baseOk = uppdrag && fastighet && adress && lgh && status;
-  // Om "Ej tillgänglig" valts behövs inga mätvärden
   const measuresOk = status === 'Ej tillgänglig' ? true : (maValue !== null && msValue !== null);
   saveBtn.disabled = !(baseOk && measuresOk);
 }
