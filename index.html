@@ -247,6 +247,97 @@ select:focus, input:focus {
 }
 .keyboard-key.wide { flex: 2; }
 .keyboard-key.clear { background: #f44336; }
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.info-btn {
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(74,144,226,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.info-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(74,144,226,0.6); }
+.info-btn:active { transform: translateY(0); }
+
+.info-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+.info-overlay.active { display: flex; }
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+
+.info-modal {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #f0f0f0;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from {transform: translateY(20px); opacity:0;} to {transform: translateY(0); opacity:1;} }
+
+.info-modal h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  color: #4a90e2;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 10px;
+  padding-right: 36px;
+}
+.info-modal h3 {
+  margin: 18px 0 8px;
+  font-size: 16px;
+  color: #ffd54f;
+}
+.info-modal p, .info-modal li { font-size: 14px; line-height: 1.55; margin: 4px 0; }
+.info-modal ul { padding-left: 20px; margin: 6px 0; }
+.info-modal .ok { color: #66bb6a; font-weight: 700; }
+.info-modal .bad { color: #ef5350; font-weight: 700; }
+.info-modal .warn { color: #ffa726; font-weight: 700; }
+
+.info-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.info-close:hover { background: rgba(255,255,255,0.25); }
 .keyboard-key.submit { background: var(--accent); font-size: 24px; }
 
 .fade-in { opacity:0; animation:fadeIn 0.7s ease forwards; }
@@ -363,7 +454,10 @@ select { font-size: 22px !important; }
 
 <body>
 <div class="topbar">
-  Kontroll av jordfelsbrytare
+  <svg class="icon" width="28" height="28" viewBox="0 0 24 24">
+    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+  </svg>
+  Jordfelsbrytare Kontroll
 </div>
 <div id="loader" class="loader"></div>
 
@@ -371,12 +465,15 @@ select { font-size: 22px !important; }
 <div class="card">
 
   <div class="form-group">
-    <label>
-      <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
-        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-      </svg>
-      Uppdrag
+    <label class="label-row" style="width:100%;">
+      <span style="display:inline-flex;align-items:center;gap:10px;">
+        <svg class="icon" width="26" height="26" viewBox="0 0 24 24">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+        </svg>
+        Uppdrag
+      </span>
+      <button type="button" class="info-btn" onclick="openInfo()" style="margin-left:auto;">ⓘ INFO</button>
     </label>
     <select id="uppdrag"></select>
   </div>
@@ -509,8 +606,51 @@ select { font-size: 22px !important; }
   </div>
 </div>
 
+<!-- INFO Modal -->
+<div id="infoOverlay" class="info-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="info-modal">
+    <button class="info-close" onclick="closeInfo()" aria-label="Stäng">✕</button>
+    <h2>Manual – Jordfelsbrytare Kontroll</h2>
+
+    <h3>🔧 Test av 30 mA jordfelsbrytare</h3>
+    <ul>
+      <li><strong>MODE</strong> → STRÖM (mA)</li>
+      <li><strong>RCD-typ:</strong> NORMAL</li>
+      <li><strong>Maxström:</strong> 30 mA eller 100 mA</li>
+      <li>Tryck <strong>TEST</strong></li>
+      <li>➡️ JFB löser → värde visas</li>
+    </ul>
+
+    <h3>✅ Godkända värden (30 mA JFB)</h3>
+    <ul>
+      <li><span class="ok">≤ 30 mA → GODKÄND</span></li>
+      <li><span class="bad">&gt; 30 mA → EJ GODKÄND</span></li>
+      <li><em>Vanligt utlösningsvärde: ca 18–28 mA</em></li>
+    </ul>
+
+    <h3>⏱️ Tidstest</h3>
+    <ul>
+      <li><strong>MODE</strong> → TID (ms)</li>
+      <li>NORMAL, 30 ms</li>
+      <li>Tryck <strong>TEST</strong></li>
+      <li><span class="ok">≤ 30 ms → ✅ GODKÄND</span></li>
+      <li><span class="bad">&gt; 30 ms → ❌ EJ GODKÄND</span></li>
+    </ul>
+
+    <h3>⚠️ Varningar</h3>
+    <ul>
+      <li><span class="warn">🔺 400 V-symbol → Avbryt direkt</span></li>
+      <li><span class="warn">🔺 Saknad jord</span></li>
+      <li><span class="warn">🔺 Jordpotential &gt; 50 V</span></li>
+    </ul>
+  </div>
+</div>
+
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxVMbYDg1Oxqlydeeu68UAXCmg26bZFEbpnC_urER7c3V7HAuq6GwHKh9yP99UjGz72/exec";
+function openInfo(){ document.getElementById('infoOverlay').classList.add('active'); document.body.style.overflow='hidden'; }
+function closeInfo(){ document.getElementById('infoOverlay').classList.remove('active'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeInfo(); });
 let allData = [];
 let LGH_KEY = "lgh";
 let currentNumber = "0";
